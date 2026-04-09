@@ -9,18 +9,28 @@
 // ── 실시간 날씨 (Open-Meteo API) ──────────────────────
 async function loadWeather() {
   const WX = {
-    0:['☀','맑음'],1:['🌤','대체로맑음'],2:['⛅','구름조금'],3:['☁','흐림'],
+    0:['☀','맑음'],1:['🌤','맑음'],2:['⛅','구름조금'],3:['☁','흐림'],
     45:['🌫','안개'],48:['🌫','안개'],
     51:['🌦','이슬비'],53:['🌦','이슬비'],55:['🌧','이슬비'],
     61:['🌧','비'],63:['🌧','비'],65:['🌧','폭우'],
     71:['❄','눈'],73:['❄','눈'],75:['❄','폭설'],
-    80:['🌦','소나기'],81:['🌧','소나기'],82:['⛈','강한소나기'],
+    80:['🌦','소나기'],81:['🌧','소나기'],82:['⛈','소나기'],
     95:['⛈','뇌우'],96:['⛈','뇌우'],99:['⛈','뇌우']
   };
-  const api = (lat,lon) =>
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-    `&daily=temperature_2m_max,temperature_2m_min,weathercode` +
-    `&timezone=Asia%2FTokyo&start_date=2026-04-11&end_date=2026-04-15`;
+  // file:// 프로토콜에서는 fetch가 차단됨 → 링크 텍스트만 표시
+  if (window.location.protocol === 'file:') {
+    document.querySelectorAll('[id^="wx-day"]').forEach(el => {
+      el.textContent = '탭해서 날씨 보기';
+    });
+    return;
+  }
+  // Open-Meteo API (weather_code = 현재 필드명)
+  const api = (lat, lon) =>
+    'https://api.open-meteo.com/v1/forecast' +
+    '?latitude=' + lat + '&longitude=' + lon +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min' +
+    '&timezone=Asia%2FTokyo' +
+    '&start_date=2026-04-11&end_date=2026-04-15';
   try {
     const [oRes, kRes] = await Promise.all([
       fetch(api(34.6937, 135.5023)),
@@ -28,20 +38,22 @@ async function loadWeather() {
     ]);
     if (!oRes.ok || !kRes.ok) throw new Error('API 오류');
     const [o, k] = await Promise.all([oRes.json(), kRes.json()]);
+    // weather_code 또는 weathercode (구버전) 모두 처리
+    const getCode = d => d.daily.weather_code || d.daily.weathercode || [];
     [{day:1,d:o,i:0},{day:2,d:o,i:1},{day:3,d:o,i:2},{day:4,d:k,i:3},{day:5,d:o,i:4}]
-    .forEach(({day,d,i}) => {
-      const el = document.getElementById(`wx-day${day}`);
+    .forEach(({day, d, i}) => {
+      const el = document.getElementById('wx-day' + day);
       if (!el) return;
-      const code = d.daily.weathercode[i];
+      const code = getCode(d)[i];
       const hi = Math.round(d.daily.temperature_2m_max[i]);
       const lo = Math.round(d.daily.temperature_2m_min[i]);
-      const [ic, desc] = WX[code] || ['🌡','예보없음'];
-      el.textContent = `${ic} ${lo}–${hi}°C · ${desc}`;
+      const [ic, desc] = WX[code] || ['🌡', '예보없음'];
+      el.textContent = ic + ' ' + lo + '–' + hi + '°C · ' + desc;
     });
   } catch(e) {
-    console.warn('날씨 로드 오류:', e);
+    console.warn('날씨:', e.message);
     document.querySelectorAll('[id^="wx-day"]').forEach(el => {
-      el.textContent = '날씨 보기 ↗';
+      el.textContent = '탭해서 날씨 보기';
     });
   }
 }
@@ -235,7 +247,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="day-badge badge-osaka">오사카</div>
     <div class="day-title">4월 11일 토요일 — 도착일</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6200/27100/" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-1"><span id="wx-day1">로딩중…</span> ↗</a>
+      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6200/27100/10days.html" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-1"><span id="wx-day1">로딩중…</span> ↗</a>
       <div class="meta-chip">👕 면바지, 티셔츠</div>
     </div>
   </div>
@@ -298,7 +310,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="day-badge badge-osaka">오사카</div>
     <div class="day-title">4월 12일 일요일</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6200/27100/" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-2"><span id="wx-day2">로딩중…</span> ↗</a>
+      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6200/27100/10days.html" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-2"><span id="wx-day2">로딩중…</span> ↗</a>
     </div>
   </div>
   <div class="route-bar">
@@ -393,7 +405,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="day-badge badge-move">이동일</div>
     <div class="day-title">4월 13일 월요일 — 오사카→교토</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6200/27100/" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-3"><span id="wx-day3">로딩중…</span> ↗</a>
+      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6200/27100/10days.html" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-3"><span id="wx-day3">로딩중…</span> ↗</a>
       <div class="meta-chip">👕 코튼타이즈, 반바지, 바람막이</div>
     </div>
   </div>
@@ -582,7 +594,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="day-badge badge-kyoto">교토</div>
     <div class="day-title">4월 14일 화요일</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6100/26100/" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-4"><span id="wx-day4">로딩중…</span> ↗</a>
+      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6100/26100/10days.html" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-4"><span id="wx-day4">로딩중…</span> ↗</a>
       <div class="meta-chip">👕 면바지, 티셔츠, 아우터셔츠</div>
     </div>
   </div>
@@ -719,7 +731,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="day-badge badge-home">귀국일</div>
     <div class="day-title">4월 15일 수요일 — 귀국</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6200/27100/" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-5"><span id="wx-day5">로딩중…</span> ↗</a>
+      <a class="meta-chip" href="https://tenki.jp/forecast/6/30/6200/27100/10days.html" target="_blank" style="text-decoration:none;color:inherit" id="wx-chip-5"><span id="wx-day5">로딩중…</span> ↗</a>
     </div>
   </div>
   <div class="plan-toggle">
