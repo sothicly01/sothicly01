@@ -7,16 +7,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
-:root{--osaka:#1d4ed8;--osaka-bg:#dbeafe;--move:#b45309;--move-bg:#fef3c7;--kyoto:#166534;--kyoto-bg:#dcfce7;--home:#be123c;--home-bg:#fee2e2;--gray:#6b7280;--border:#e5e7eb;--radius:14px;--shadow:0 2px 14px rgba(0,0,0,.09)}
+:root{
+  --osaka:#1d4ed8;--osaka-bg:#dbeafe;
+  --move:#b45309;--move-bg:#fef3c7;
+  --kyoto:#166534;--kyoto-bg:#dcfce7;
+  --home:#be123c;--home-bg:#fee2e2;
+  --gray:#6b7280;--border:#e5e7eb;
+  --radius:14px;--shadow:0 2px 14px rgba(0,0,0,.09)
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{font-size:17px}
-body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f2f2f7;color:#1a1a1a;padding-bottom:48px}
+body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f2f2f7;color:#1a1a1a;padding-bottom:52px}
+
 .top-header{background:white;padding:20px 20px 16px;border-bottom:1px solid var(--border)}
 .top-header h1{font-size:22px;font-weight:700;letter-spacing:-.5px}
 .top-header p{font-size:14px;color:var(--gray);margin-top:4px}
+
 #map{width:100%;height:310px}
 .map-wrap{position:relative}
 .map-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:white;font-size:12px;padding:5px 14px;border-radius:20px;pointer-events:none;z-index:500;white-space:nowrap}
+
 .tabs{display:flex;overflow-x:auto;background:white;border-bottom:1px solid var(--border);padding:0 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex-shrink:0;padding:14px 15px;font-size:15px;font-weight:600;color:var(--gray);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all .15s}
@@ -24,9 +34,11 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .tab[data-theme=move].active{color:var(--move);border-bottom-color:var(--move)}
 .tab[data-theme=kyoto].active{color:var(--kyoto);border-bottom-color:var(--kyoto)}
 .tab[data-theme=home].active{color:var(--home);border-bottom-color:var(--home)}
+
 .day-section{display:none;padding:16px 16px 0}
 .day-section.active{display:block}
 .day-card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px}
+
 .day-header{padding:16px 18px 14px;border-bottom:1px solid var(--border)}
 .day-badge{display:inline-block;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:8px}
 .badge-osaka{background:var(--osaka-bg);color:var(--osaka)}
@@ -36,32 +48,60 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .day-title{font-size:19px;font-weight:700;letter-spacing:-.3px}
 .day-meta{display:flex;gap:10px;margin-top:9px;flex-wrap:wrap}
 .meta-chip{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--gray);background:#f3f4f6;padding:5px 10px;border-radius:8px}
+
+/* A/B 플랜 토글 */
 .plan-toggle{display:flex;margin:0 18px;gap:8px;padding:12px 0;border-bottom:1px solid var(--border)}
 .plan-btn{flex:1;padding:11px 0;border-radius:10px;font-size:14px;font-weight:700;border:1.5px solid var(--border);background:white;color:var(--gray);cursor:pointer;transition:all .15s;text-align:center}
 .plan-btn.active-a{background:var(--move-bg);color:var(--move);border-color:var(--move)}
 .plan-btn.active-b{background:var(--kyoto-bg);color:var(--kyoto);border-color:var(--kyoto)}
+.plan-panel{display:none}.plan-panel.active{display:block}
+
+/* 루트 바 */
 .route-bar{padding:13px 18px;background:#fafaf9;border-bottom:1px solid var(--border)}
 .route-bar-title{font-size:13px;font-weight:600;color:var(--gray);margin-bottom:8px}
 .route-stops{display:flex;align-items:center;flex-wrap:wrap;gap:5px}
 .route-stop{font-size:13px;font-weight:600}
-.route-arrow{font-size:13px;color:#bbb}
+/* 클릭 가능한 화살표 (구글맵 링크) */
+.route-arrow{font-size:12px;color:#bbb}
+.gmap-btn{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;cursor:pointer;text-decoration:none;border:none;transition:opacity .15s}
+.gmap-walk{background:#e0f2fe;color:#0369a1}
+.gmap-transit{background:#dcfce7;color:#166534}
+.gmap-drive{background:#fef3c7;color:#b45309}
+.gmap-btn:active{opacity:.7}
+
+/* 타임라인 */
 .timeline{padding:10px 18px 16px}
-.tl-item{display:flex;gap:14px;padding:10px 0;position:relative}
-.tl-item:not(:last-child)::after{content:'';position:absolute;left:59px;top:42px;bottom:-10px;width:1.5px;background:var(--border)}
-.tl-time{font-size:13px;color:var(--gray);width:44px;text-align:right;padding-top:6px;font-variant-numeric:tabular-nums;flex-shrink:0}
+.tl-item{display:flex;gap:12px;padding:9px 0;position:relative;align-items:flex-start}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:57px;top:40px;bottom:-9px;width:1.5px;background:var(--border)}
+.tl-time{font-size:12px;color:var(--gray);width:42px;text-align:right;padding-top:7px;font-variant-numeric:tabular-nums;flex-shrink:0;line-height:1.3}
 .tl-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.icon-eat{background:#dbeafe}.icon-cafe{background:#d1fae5}.icon-shop{background:#fef3c7}.icon-sight{background:#ede9fe}.icon-move{background:#f3f4f6}.icon-sleep{background:#fce7f3}
+.icon-eat{background:#dbeafe}.icon-cafe{background:#d1fae5}.icon-shop{background:#fef3c7}
+.icon-sight{background:#ede9fe}.icon-move{background:#f3f4f6}.icon-sleep{background:#fce7f3}
 .tl-body{flex:1;padding-top:5px}
 .tl-name{font-size:16px;font-weight:600;line-height:1.4}
 .tl-desc{font-size:14px;color:var(--gray);margin-top:3px;line-height:1.5}
-.tl-warn{display:inline-block;font-size:12px;font-weight:700;background:#fee2e2;color:#be123c;padding:2px 8px;border-radius:6px;margin-top:4px}
-.tl-tag{display:inline-block;font-size:12px;font-weight:700;background:#fef3c7;color:#b45309;padding:2px 8px;border-radius:6px;margin-top:4px}
-.plan-panel{display:none}.plan-panel.active{display:block}
+.tl-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.tl-tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px}
+.tag-book{background:#fef3c7;color:#b45309}
+.tag-warn{background:#fee2e2;color:#be123c}
+.tag-tip{background:#f3e8ff;color:#7c3aed}
+/* 구글맵 인라인 링크 */
+.tl-gmap{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none;margin-top:5px;cursor:pointer}
+.tl-gmap-walk{background:#e0f2fe;color:#0369a1}
+.tl-gmap-transit{background:#dcfce7;color:#166534}
+.tl-gmap-drive{background:#fef3c7;color:#b45309}
+.tl-gmap svg{width:11px;height:11px;flex-shrink:0}
+
 .note-box{margin:0 18px 16px;padding:13px 14px;background:#fff7ed;border-radius:10px;font-size:14px;color:#92400e;line-height:1.6}
+
 .legend-wrap{padding:12px 16px 0}
 .legend{background:white;border-radius:12px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:12px;box-shadow:var(--shadow)}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:14px;color:#444}
 .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* 구글맵 범례 */
+.gmap-legend{background:white;border-radius:12px;padding:12px 16px;margin:10px 16px 0;box-shadow:var(--shadow);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.gmap-legend-title{font-size:13px;color:var(--gray);font-weight:600;width:100%}
 </style>
 </head>
 <body>
@@ -73,15 +113,15 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 <div class="map-wrap">
   <div id="map"></div>
-  <div class="map-hint" id="map-hint">마커를 눌러 장소 정보를 확인하세요</div>
+  <div class="map-hint" id="map-hint">마커·이동 버튼을 누르면 구글맵으로 연결돼요</div>
 </div>
 
 <div class="tabs">
-  <div class="tab active"  data-day="1" data-theme="osaka" onclick="switchDay(1)">4/11 토</div>
-  <div class="tab"         data-day="2" data-theme="osaka" onclick="switchDay(2)">4/12 일</div>
-  <div class="tab"         data-day="3" data-theme="move"  onclick="switchDay(3)">4/13 월</div>
-  <div class="tab"         data-day="4" data-theme="kyoto" onclick="switchDay(4)">4/14 화</div>
-  <div class="tab"         data-day="5" data-theme="home"  onclick="switchDay(5)">4/15 수</div>
+  <div class="tab active" data-day="1" data-theme="osaka" onclick="switchDay(1)">4/11 토</div>
+  <div class="tab"        data-day="2" data-theme="osaka" onclick="switchDay(2)">4/12 일</div>
+  <div class="tab"        data-day="3" data-theme="move"  onclick="switchDay(3)">4/13 월</div>
+  <div class="tab"        data-day="4" data-theme="kyoto" onclick="switchDay(4)">4/14 화</div>
+  <div class="tab"        data-day="5" data-theme="home"  onclick="switchDay(5)">4/15 수</div>
 </div>
 
 <div class="legend-wrap">
@@ -94,301 +134,670 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
   </div>
 </div>
 
+<div class="gmap-legend">
+  <div class="gmap-legend-title">🗺 이동 버튼 → 구글맵으로 열기</div>
+  <span class="gmap-btn gmap-walk">🚶 도보</span>
+  <span class="gmap-btn gmap-transit">🚇 대중교통</span>
+  <span class="gmap-btn gmap-drive">🚕 자동차·택시</span>
+</div>
+
 <svg style="display:none">
-  <symbol id="ic-eat" viewBox="0 0 16 16"><line x1="5" y1="2" x2="5" y2="8" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="8" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/><line x1="5" y1="8" x2="8" y2="8" stroke="#1d4ed8" stroke-width="1.3" stroke-linecap="round"/><line x1="6.5" y1="8" x2="6.5" y2="14" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="2" x2="11" y2="14" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/><path d="M11 6 Q13.5 6 13.5 4 Q13.5 2 11 2" stroke="#1d4ed8" stroke-width="1.3" fill="none"/></symbol>
-  <symbol id="ic-cafe" viewBox="0 0 16 16"><path d="M4 10 Q4 6 8 6 Q12 6 12 10" stroke="#059669" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="6" y1="10" x2="10" y2="10" stroke="#059669" stroke-width="1.5" stroke-linecap="round"/><rect x="6.5" y="10" width="3" height="2.5" rx="0.5" fill="#059669"/><line x1="8" y1="3.5" x2="8" y2="6" stroke="#059669" stroke-width="1.3" stroke-linecap="round"/></symbol>
-  <symbol id="ic-shop" viewBox="0 0 16 16"><path d="M3 8 L2.5 14 L13.5 14 L13 8 Z" stroke="#b45309" stroke-width="1.4" fill="none" stroke-linejoin="round"/><path d="M5.5 8 Q5.5 3.5 8 3.5 Q10.5 3.5 10.5 8" stroke="#b45309" stroke-width="1.4" fill="none" stroke-linecap="round"/></symbol>
+  <symbol id="ic-eat"   viewBox="0 0 16 16"><line x1="5" y1="2" x2="5" y2="8" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="8" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/><line x1="5" y1="8" x2="8" y2="8" stroke="#1d4ed8" stroke-width="1.3" stroke-linecap="round"/><line x1="6.5" y1="8" x2="6.5" y2="14" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="2" x2="11" y2="14" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/><path d="M11 6 Q13.5 6 13.5 4 Q13.5 2 11 2" stroke="#1d4ed8" stroke-width="1.3" fill="none"/></symbol>
+  <symbol id="ic-cafe"  viewBox="0 0 16 16"><path d="M4 10 Q4 6 8 6 Q12 6 12 10" stroke="#059669" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="6" y1="10" x2="10" y2="10" stroke="#059669" stroke-width="1.5" stroke-linecap="round"/><rect x="6.5" y="10" width="3" height="2.5" rx="0.5" fill="#059669"/><line x1="8" y1="3.5" x2="8" y2="6" stroke="#059669" stroke-width="1.3" stroke-linecap="round"/></symbol>
+  <symbol id="ic-shop"  viewBox="0 0 16 16"><path d="M3 8 L2.5 14 L13.5 14 L13 8 Z" stroke="#b45309" stroke-width="1.4" fill="none" stroke-linejoin="round"/><path d="M5.5 8 Q5.5 3.5 8 3.5 Q10.5 3.5 10.5 8" stroke="#b45309" stroke-width="1.4" fill="none" stroke-linecap="round"/></symbol>
   <symbol id="ic-sight" viewBox="0 0 16 16"><rect x="2" y="9" width="12" height="6" rx="0.5" stroke="#7c3aed" stroke-width="1.4" fill="none"/><path d="M1 9 L8 3 L15 9" stroke="#7c3aed" stroke-width="1.4" fill="none" stroke-linejoin="round"/><rect x="7" y="11" width="2.5" height="4" rx="0.3" fill="#7c3aed"/></symbol>
-  <symbol id="ic-move" viewBox="0 0 16 16"><circle cx="8" cy="3.5" r="2.2" fill="#6b7280"/><line x1="8" y1="5.7" x2="8" y2="11" stroke="#6b7280" stroke-width="1.8" stroke-linecap="round"/><line x1="5" y1="8" x2="11" y2="8" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="11" x2="5.5" y2="14.5" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="11" x2="10.5" y2="14.5" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="ic-move"  viewBox="0 0 16 16"><circle cx="8" cy="3.5" r="2.2" fill="#6b7280"/><line x1="8" y1="5.7" x2="8" y2="11" stroke="#6b7280" stroke-width="1.8" stroke-linecap="round"/><line x1="5" y1="8" x2="11" y2="8" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="11" x2="5.5" y2="14.5" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="11" x2="10.5" y2="14.5" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/></symbol>
   <symbol id="ic-sleep" viewBox="0 0 16 16"><path d="M4 10 Q4 4.5 8 4.5 Q12 4.5 12 10 L12 12 L4 12 Z" stroke="#be185d" stroke-width="1.4" fill="none"/><line x1="3" y1="12" x2="13" y2="12" stroke="#be185d" stroke-width="1.5" stroke-linecap="round"/><line x1="5.5" y1="12" x2="5.5" y2="14.5" stroke="#be185d" stroke-width="1.4" stroke-linecap="round"/><line x1="10.5" y1="12" x2="10.5" y2="14.5" stroke="#be185d" stroke-width="1.4" stroke-linecap="round"/></symbol>
 </svg>
 
-<!-- DAY 1 -->
+<!-- ═══════════ DAY 1 · 4/11 ═══════════ -->
 <div class="day-section active" id="day1">
-  <div class="day-card">
-    <div class="day-header">
-      <div class="day-badge badge-osaka">오사카</div>
-      <div class="day-title">4월 11일 토요일 — 도착일</div>
-      <div class="day-meta">
-        <div class="meta-chip">☁ 16–21°C · 흐림</div>
-        <div class="meta-chip">👕 면바지, 티셔츠</div>
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-badge badge-osaka">오사카</div>
+    <div class="day-title">4월 11일 토요일 — 도착일</div>
+    <div class="day-meta">
+      <div class="meta-chip">☁ 15–19°C · 흐림</div>
+      <div class="meta-chip">👕 면바지, 티셔츠</div>
+    </div>
+  </div>
+  <div class="route-bar">
+    <div class="route-bar-title">오늘의 동선</div>
+    <div class="route-stops">
+      <span class="route-stop" style="color:var(--osaka)">간사이 공항</span>
+      <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.4320,135.2366&destination=34.7029,135.4953&travelmode=transit" target="_blank">🚌 리무진버스</a>
+      <span class="route-stop" style="color:var(--osaka)">우메다</span>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <span class="tl-time">17:00</span>
+      <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">간사이 공항 도착</div>
+        <div class="tl-desc">짐 찾기 + ICOCA 교통카드 발급 → 18:30까지</div>
       </div>
     </div>
-    <div class="route-bar">
-      <div class="route-bar-title">오늘의 동선</div>
-      <div class="route-stops">
-        <span class="route-stop" style="color:var(--osaka)">간사이 공항</span>
-        <span class="route-arrow">🚌</span>
-        <span class="route-stop" style="color:var(--osaka)">우메다</span>
+    <div class="tl-item">
+      <span class="tl-time">18:30</span>
+      <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">리무진 버스 탑승</div>
+        <div class="tl-desc">19:30–20:30 호텔 도착 / 시간 남으면 하나다코 네기타코야키 8알</div>
+        <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.4320,135.2366&destination=34.7029,135.4953&travelmode=transit" target="_blank">🚌 대중교통으로 열기</a>
       </div>
     </div>
-    <div class="timeline">
-      <div class="tl-item"><span class="tl-time">17:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">간사이 공항 도착</div><div class="tl-desc">짐 찾기 + ICOCA 교통카드 발급 → 18:30까지</div></div></div>
-      <div class="tl-item"><span class="tl-time">18:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">리무진 버스 탑승</div><div class="tl-desc">19:30–20:30 호텔 도착 / 시간 남으면 하나다코 네기타코야키 8알</div></div></div>
-      <div class="tl-item"><span class="tl-time">20:45</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">야키니쿠 부시도우 스미코 우메다</div><div class="tl-desc"><span class="tl-tag">★ 예약 완료</span></div></div></div>
-      <div class="tl-item"><span class="tl-time">22:00</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">돈키호테 우메다 + KALDI + 편의점</div><div class="tl-desc">비타민음료·커피(내일 아침) 무조건 구매<br>훼미리마트·세븐·로손 숙소 근처 다 있음</div></div></div>
-      <div class="tl-item"><span class="tl-time">24:00</span><div class="tl-icon icon-sleep"><svg width="16" height="16"><use href="#ic-sleep"/></svg></div><div class="tl-body"><div class="tl-name">취침</div><div class="tl-desc">24시 전 목표</div></div></div>
+    <div class="tl-item">
+      <span class="tl-time">20:45</span>
+      <div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">야키니쿠 부시도우 스미코 우메다</div>
+        <div class="tl-tags"><span class="tl-tag tag-book">★ 예약 완료</span></div>
+        <a class="tl-gmap tl-gmap-walk" href="https://maps.app.goo.gl/orxzvkZEEUAhK38F9" target="_blank">🗺 지도에서 보기</a>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">22:00</span>
+      <div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">돈키호테 우메다 + KALDI + 편의점</div>
+        <div class="tl-desc">비타민음료·커피(내일 아침) 무조건 구매<br>훼미리마트·세븐·로손 숙소 근처 다 있음</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">24:00</span>
+      <div class="tl-icon icon-sleep"><svg width="16" height="16"><use href="#ic-sleep"/></svg></div>
+      <div class="tl-body"><div class="tl-name">취침</div><div class="tl-desc">24시 전 목표</div></div>
     </div>
   </div>
 </div>
+</div>
 
-<!-- DAY 2 -->
+<!-- ═══════════ DAY 2 · 4/12 ═══════════ -->
 <div class="day-section" id="day2">
-  <div class="day-card">
-    <div class="day-header">
-      <div class="day-badge badge-osaka">오사카</div>
-      <div class="day-title">4월 12일 일요일</div>
-      <div class="day-meta">
-        <div class="meta-chip">🌧 19–23°C · 비</div>
-        <div class="meta-chip">👕 코튼타이즈, 반바지, 바람막이</div>
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-badge badge-osaka">오사카</div>
+    <div class="day-title">4월 12일 일요일</div>
+    <div class="day-meta">
+      <div class="meta-chip">🌤 17–23°C</div>
+    </div>
+  </div>
+  <div class="route-bar">
+    <div class="route-bar-title">오늘의 동선</div>
+    <div class="route-stops">
+      <span class="route-stop" style="color:var(--osaka)">하나다코·루쿠아</span>
+      <a class="gmap-btn gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=34.7029,135.4953&destination=34.7028,135.4985&travelmode=walking" target="_blank">🚶</a>
+      <span class="route-stop" style="color:var(--osaka)">한큐멘즈</span>
+      <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.7028,135.4985&destination=34.6687,135.5013&travelmode=transit" target="_blank">🚇</a>
+      <span class="route-stop" style="color:var(--osaka)">도톤보리</span>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <span class="tl-time">08:30</span>
+      <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+      <div class="tl-body"><div class="tl-name">기상 → 09:30 준비 완료</div></div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">10:00</span>
+      <div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">하나다코 — 네기다코 6알씩</div>
+        <div class="tl-desc">아침 식사</div>
       </div>
     </div>
+    <div class="tl-item">
+      <span class="tl-time">11:00</span>
+      <div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div>
+      <div class="tl-body"><div class="tl-name">하브스 (or 우에시마 커피)</div><div class="tl-desc">~11:30</div></div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">11:30</span>
+      <div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div>
+      <div class="tl-body"><div class="tl-name">루쿠아 쇼핑 — 편집샵 위주</div><div class="tl-desc">~15:30</div></div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">15:30</span>
+      <div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">Sushi Isshin</div>
+        <div class="tl-desc">~16:30</div>
+        <a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/search/Sushi+Isshin+Umeda/@34.7029,135.4953" target="_blank">🗺 지도에서 보기</a>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">16:30</span>
+      <div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div>
+      <div class="tl-body"><div class="tl-name">한큐 멘즈 쇼핑</div><div class="tl-desc">~18:30</div></div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">18:30</span>
+      <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">도톤보리 이동</div>
+        <div class="tl-desc">지하철 미도스지선 약 10분</div>
+        <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.7028,135.4985&destination=34.6687,135.5013&travelmode=transit" target="_blank">🚇 대중교통으로 열기</a>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">19:00</span>
+      <div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div>
+      <div class="tl-body"><div class="tl-name">규카츠 토미타</div><div class="tl-desc">~20:30</div></div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">21:00</span>
+      <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">우메다 귀환</div>
+        <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.6687,135.5013&destination=34.7029,135.4953&travelmode=transit" target="_blank">🚇 대중교통으로 열기</a>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">21:00</span>
+      <div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div>
+      <div class="tl-body"><div class="tl-name">돈키호테 우메다 + 편의점</div><div class="tl-desc">~22:30 / 1일차에 샀으면 가볍게</div></div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">24:30</span>
+      <div class="tl-icon icon-sleep"><svg width="16" height="16"><use href="#ic-sleep"/></svg></div>
+      <div class="tl-body"><div class="tl-name">취침</div></div>
+    </div>
+  </div>
+  <div class="note-box">★ 내일 아침: 비타민음료 + 커피 + 간단한 요깃거리 준비</div>
+</div>
+</div>
+
+<!-- ═══════════ DAY 3 · 4/13 ═══════════ -->
+<div class="day-section" id="day3">
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-badge badge-move">이동일</div>
+    <div class="day-title">4월 13일 월요일 — 오사카→교토</div>
+    <div class="day-meta">
+      <div class="meta-chip">🌧 15–20°C · 비</div>
+      <div class="meta-chip">👕 코튼타이즈, 반바지, 바람막이</div>
+    </div>
+  </div>
+  <div class="plan-toggle">
+    <button class="plan-btn active-a" id="d3-btn-a" onclick="togglePlan(3,'a')">A안 · 기요미즈데라</button>
+    <button class="plan-btn"          id="d3-btn-b" onclick="togglePlan(3,'b')">B안 · 아라시야마</button>
+  </div>
+
+  <!-- 3-A -->
+  <div class="plan-panel active" id="d3-a">
     <div class="route-bar">
-      <div class="route-bar-title">오늘의 동선</div>
+      <div class="route-bar-title">오늘의 동선 (A)</div>
       <div class="route-stops">
-        <span class="route-stop" style="color:var(--osaka)">하나다코</span><span class="route-arrow">→</span>
-        <span class="route-stop" style="color:var(--osaka)">루쿠아</span><span class="route-arrow">→</span>
-        <span class="route-stop" style="color:var(--osaka)">한큐멘즈</span><span class="route-arrow">🚇</span>
-        <span class="route-stop" style="color:var(--osaka)">도톤보리</span>
+        <span class="route-stop" style="color:var(--move)">우메다</span>
+        <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.7029,135.4953&destination=35.0085,135.7620&travelmode=transit" target="_blank">🚃 한큐특급</a>
+        <span class="route-stop" style="color:var(--move)">가와라마치</span>
+        <a class="gmap-btn gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=35.0085,135.7620&destination=34.9947,135.7847&travelmode=walking" target="_blank">🚶 1.8km</a>
+        <span class="route-stop" style="color:var(--move)">기요미즈데라</span>
+        <a class="gmap-btn gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=34.9947,135.7847&destination=35.0096,135.7598&travelmode=walking" target="_blank">🚶</a>
+        <span class="route-stop" style="color:var(--move)">신풍관</span>
       </div>
     </div>
     <div class="timeline">
-      <div class="tl-item"><span class="tl-time">08:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상 → 09:30 준비 완료</div></div></div>
-      <div class="tl-item"><span class="tl-time">10:00</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">하나다코 — 네기다코 10알</div><div class="tl-desc">아침 식사</div></div></div>
-      <div class="tl-item"><span class="tl-time">11:00</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">하브스 (or 우에시마 커피)</div><div class="tl-desc">~11:30</div></div></div>
-      <div class="tl-item"><span class="tl-time">11:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">루쿠아 쇼핑 — 편집샵 위주</div><div class="tl-desc">~14:30</div></div></div>
-      <div class="tl-item"><span class="tl-time">14:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">Umeda Yoshinozushi</div><div class="tl-desc">~15:30</div></div></div>
-      <div class="tl-item"><span class="tl-time">15:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">한큐 멘즈 쇼핑</div><div class="tl-desc">~18:30</div></div></div>
-      <div class="tl-item"><span class="tl-time">18:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">도톤보리 이동</div><div class="tl-desc">지하철 미도스지선 약 10분</div></div></div>
-      <div class="tl-item"><span class="tl-time">19:00</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">규카츠 토미타</div><div class="tl-desc">~20:30</div></div></div>
-      <div class="tl-item"><span class="tl-time">21:00</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">우메다 귀환 → 돈키호테 + 편의점</div><div class="tl-desc">~23:00 / 1일차에 샀으면 가볍게</div></div></div>
-      <div class="tl-item"><span class="tl-time">24:30</span><div class="tl-icon icon-sleep"><svg width="16" height="16"><use href="#ic-sleep"/></svg></div><div class="tl-body"><div class="tl-name">취침</div></div></div>
+      <div class="tl-item">
+        <span class="tl-time">07:30</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body"><div class="tl-name">기상 — 편의점 아침</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">08:30</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">체크아웃 + 교토 출발</div>
+          <div class="tl-desc">한큐 특급 우메다→가와라마치 약 45분</div>
+          <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.7029,135.4953&destination=35.0085,135.7620&travelmode=transit" target="_blank">🚃 대중교통으로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">10:00</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body"><div class="tl-name">가와라마치 미쓰이 호텔 도착</div><div class="tl-desc">짐 맡기기</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">11:00</span>
+        <div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div>
+        <div class="tl-body"><div class="tl-name">멘야 이노이치</div><div class="tl-desc">11시 오픈 · ~12:00</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">12:30</span>
+        <div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">커피 테이크아웃 후 기요미즈데라 출발</div>
+          <a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=35.0085,135.7620&destination=34.9947,135.7847&travelmode=walking" target="_blank">🚶 도보 1.8km로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">13:00</span>
+        <div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div>
+        <div class="tl-body"><div class="tl-name">기요미즈데라</div><div class="tl-desc">~15:00</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">15:00</span>
+        <div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div>
+        <div class="tl-body"><div class="tl-name">Fumon-an &amp; Fumon Chaya</div><div class="tl-desc">~16:00 · 와라비모찌, 말차파르페</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">16:30</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">숙소 도착 · 체크인</div>
+          <div class="tl-desc">1.9km 도보</div>
+          <a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=34.9947,135.7847&destination=35.0085,135.7620&travelmode=walking" target="_blank">🚶 도보로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">17:30</span>
+        <div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">신풍관</div>
+          <div class="tl-desc">~19:30</div>
+          <div class="tl-tags"><span class="tl-tag tag-warn">⚠ 20시 마감 주의</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">20:00</span>
+        <div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div>
+        <div class="tl-body"><div class="tl-name">Sushiro</div><div class="tl-desc">~20:45</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">21:00</span>
+        <div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div>
+        <div class="tl-body"><div class="tl-name">돈키호테 + 편의점</div><div class="tl-desc">~22:30</div></div>
+      </div>
     </div>
-    <div class="note-box">★ 내일 아침: 비타민음료 + 커피 + 간단한 요깃거리 준비</div>
+    <div class="note-box">★ 내일 아침: 비타민음료 챙기기</div>
   </div>
-</div>
 
-<!-- DAY 3 -->
-<div class="day-section" id="day3">
-  <div class="day-card">
-    <div class="day-header">
-      <div class="day-badge badge-move">이동일</div>
-      <div class="day-title">4월 13일 월요일 — 오사카→교토</div>
-      <div class="day-meta">
-        <div class="meta-chip">🌧 15–21°C · 비</div>
-        <div class="meta-chip">👕 코튼타이즈, 반바지, 바람막이</div>
-      </div>
-    </div>
-    <div class="plan-toggle">
-      <button class="plan-btn active-a" id="d3-btn-a" onclick="togglePlan(3,'a')">A안 · 기요미즈데라</button>
-      <button class="plan-btn" id="d3-btn-b" onclick="togglePlan(3,'b')">B안 · 아라시야마</button>
-    </div>
-    <!-- A안 -->
-    <div class="plan-panel active" id="d3-a">
-      <div class="route-bar">
-        <div class="route-bar-title">오늘의 동선 (A)</div>
-        <div class="route-stops">
-          <span class="route-stop" style="color:var(--move)">우메다</span><span class="route-arrow">🚃</span>
-          <span class="route-stop" style="color:var(--move)">가와라마치</span><span class="route-arrow">→</span>
-          <span class="route-stop" style="color:var(--move)">기요미즈데라</span><span class="route-arrow">→</span>
-          <span class="route-stop" style="color:var(--move)">신풍관</span>
-        </div>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><span class="tl-time">07:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상 — 편의점 아침으로 간단히 요기</div></div></div>
-        <div class="tl-item"><span class="tl-time">08:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">체크아웃 + 출발</div><div class="tl-desc">한큐 특급 우메다→가와라마치 약 45분</div></div></div>
-        <div class="tl-item"><span class="tl-time">10:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">가와라마치 미쓰이 호텔 도착</div><div class="tl-desc">짐 맡기기</div></div></div>
-        <div class="tl-item"><span class="tl-time">11:00</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">멘야 이노이치</div><div class="tl-desc">11시 오픈 · ~12:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">커피 테이크아웃</div><div class="tl-desc">기요미즈데라까지 도보 1.8km</div></div></div>
-        <div class="tl-item"><span class="tl-time">13:00</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">기요미즈데라</div><div class="tl-desc">~15:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">15:00</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">Fumon-an &amp; Fumon Chaya</div><div class="tl-desc">~16:00 · 와라비모찌, 말차파르페</div></div></div>
-        <div class="tl-item"><span class="tl-time">16:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">숙소 도착 · 체크인</div><div class="tl-desc">1.9km 도보</div></div></div>
-        <div class="tl-item"><span class="tl-time">17:30</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">신풍관</div><div class="tl-desc">~19:30<br><span class="tl-warn">⚠ 20시 마감 주의</span></div></div></div>
-        <div class="tl-item"><span class="tl-time">20:00</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">Sushiro</div><div class="tl-desc">~20:45</div></div></div>
-        <div class="tl-item"><span class="tl-time">21:00</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">돈키호테 + 편의점</div><div class="tl-desc">~22:30</div></div></div>
-      </div>
-      <div class="note-box">★ 내일 아침: 비타민음료 챙기기</div>
-    </div>
-    <!-- B안 -->
-    <div class="plan-panel" id="d3-b">
-      <div class="route-bar">
-        <div class="route-bar-title">오늘의 동선 (B)</div>
-        <div class="route-stops">
-          <span class="route-stop" style="color:var(--kyoto)">우메다</span><span class="route-arrow">🚃</span>
-          <span class="route-stop" style="color:var(--kyoto)">가와라마치</span><span class="route-arrow">🚌</span>
-          <span class="route-stop" style="color:var(--kyoto)">아라시야마</span><span class="route-arrow">🚃</span>
-          <span class="route-stop" style="color:var(--kyoto)">가와라마치</span>
-        </div>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><span class="tl-time">08:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상 → 체크아웃 + 출발</div><div class="tl-desc">한큐 특급 우메다→가와라마치 약 45분</div></div></div>
-        <div class="tl-item"><span class="tl-time">11:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">가와라마치 미쓰이 호텔 도착</div><div class="tl-desc">짐 맡기고 아라시야마로 이동</div></div></div>
-        <div class="tl-item"><span class="tl-time">13:00</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">마루키 베이커리 — 에비샌드</div><div class="tl-desc">아라시야마 도착 후 간식</div></div></div>
-        <div class="tl-item"><span class="tl-time">13:30</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">아라비카 커피 &amp; 도게츠교</div></div></div>
-        <div class="tl-item"><span class="tl-time">13:30</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">텐류지</div><div class="tl-desc">~15:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">15:00</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">치쿠린 (대나무 숲)</div><div class="tl-desc">~16:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">16:30</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">코토이모 — 미타라시 당고</div><div class="tl-desc"><span class="tl-warn">⚠ 17:30 영업 종료</span></div></div></div>
-        <div class="tl-item"><span class="tl-time">저녁A</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">아라시야마에서 저녁</div><div class="tl-desc">스테이크 오츠카 or 아라시야마 커리 → 19:00 귀환</div></div></div>
-        <div class="tl-item"><span class="tl-time">저녁B</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">아라시야마 저녁 패스 시</div><div class="tl-desc">18:30 귀환 → 멘야 이노이치</div></div></div>
-        <div class="tl-item"><span class="tl-time">21:00</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">돈키호테 + 편의점</div><div class="tl-desc">~23:00</div></div></div>
-      </div>
-      <div class="note-box">★ 내일 아침: 비타민음료 챙기기</div>
-    </div>
-  </div>
-</div>
-
-<!-- DAY 4 -->
-<div class="day-section" id="day4">
-  <div class="day-card">
-    <div class="day-header">
-      <div class="day-badge badge-kyoto">교토</div>
-      <div class="day-title">4월 14일 화요일</div>
-      <div class="day-meta">
-        <div class="meta-chip">⛅ 16–26°C · 흐림</div>
-        <div class="meta-chip">👕 면바지, 티셔츠, 아우터셔츠</div>
-      </div>
-    </div>
-    <div class="plan-toggle">
-      <button class="plan-btn active-a" id="d4-btn-a" onclick="togglePlan(4,'a')">A안 · 행자교·쇼핑</button>
-      <button class="plan-btn" id="d4-btn-b" onclick="togglePlan(4,'b')">B안 · 기요미즈데라</button>
-    </div>
-    <!-- A안 -->
-    <div class="plan-panel active" id="d4-a">
-      <div class="route-bar">
-        <div class="route-bar-title">오늘의 동선 (A)</div>
-        <div class="route-stops">
-          <span class="route-stop" style="color:var(--kyoto)">스마트커피</span><span class="route-arrow">🚕</span>
-          <span class="route-stop" style="color:var(--kyoto)">은각사</span><span class="route-arrow">🚕</span>
-          <span class="route-stop" style="color:var(--kyoto)">행자교</span><span class="route-arrow">→</span>
-          <span class="route-stop" style="color:var(--kyoto)">쇼핑</span><span class="route-arrow">→</span>
-          <span class="route-stop" style="color:var(--kyoto)">가모강</span>
-        </div>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><span class="tl-time">07:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상</div></div></div>
-        <div class="tl-item"><span class="tl-time">08:00</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">스마트커피</div><div class="tl-desc">~09:30</div></div></div>
-        <div class="tl-item"><span class="tl-time">09:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">택시로 은각사 이동</div></div></div>
-        <div class="tl-item"><span class="tl-time">10:00</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">은각사(지쇼지) 관람</div><div class="tl-desc">~12:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">12:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">철학의 길 → 택시로 점심 이동</div></div></div>
-        <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">야마모토 멘조우</div><div class="tl-desc">~14:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">14:30</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">행자교</div><div class="tl-desc">도보 1.2km · 줄 길면 → 모모타로 진</div></div></div>
-        <div class="tl-item"><span class="tl-time">15:00</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">우메조노 — 미타라시 당고</div><div class="tl-desc">~15:30</div></div></div>
-        <div class="tl-item"><span class="tl-time">15:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">가와라마치 유니클로 + 나이키</div><div class="tl-desc">~17:30</div></div></div>
-        <div class="tl-item"><span class="tl-time">17:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">BAL 쇼핑</div><div class="tl-desc">~19:30</div></div></div>
-        <div class="tl-item"><span class="tl-time">20:00</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">저녁</div><div class="tl-desc">~21:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">—</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">가모강 산책</div></div></div>
-        <div class="tl-item"><span class="tl-time">21:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">가와라마치 돈키호테</div><div class="tl-desc">~22:30</div></div></div>
-      </div>
-      <div class="note-box">★ 내일 아침: 비타민음료 + 간식거리 준비</div>
-    </div>
-    <!-- B안 -->
-    <div class="plan-panel" id="d4-b">
-      <div class="route-bar">
-        <div class="route-bar-title">오늘의 동선 (B)</div>
-        <div class="route-stops">
-          <span class="route-stop" style="color:var(--kyoto)">스마트커피</span><span class="route-arrow">🚕</span>
-          <span class="route-stop" style="color:var(--kyoto)">은각사</span><span class="route-arrow">🚶</span>
-          <span class="route-stop" style="color:var(--kyoto)">기요미즈데라</span><span class="route-arrow">→</span>
-          <span class="route-stop" style="color:var(--kyoto)">가모강·저녁</span>
-        </div>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><span class="tl-time">07:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상</div></div></div>
-        <div class="tl-item"><span class="tl-time">08:00</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">스마트커피</div><div class="tl-desc">~09:30</div></div></div>
-        <div class="tl-item"><span class="tl-time">09:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">택시로 은각사 이동</div></div></div>
-        <div class="tl-item"><span class="tl-time">10:00</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">은각사(지쇼지) 관람</div><div class="tl-desc">~12:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">12:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">철학의 길 → 택시로 점심 이동</div></div></div>
-        <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">야마모토 멘조우</div><div class="tl-desc">~14:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">14:45</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">기요미즈데라 투어</div><div class="tl-desc">도보 2.2km (35분) · ~16:00</div></div></div>
-        <div class="tl-item"><span class="tl-time">16:00</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">Fumon-an &amp; Fumon Chaya</div><div class="tl-desc">~17:00 · 와라비모찌, 말차파르페</div></div></div>
-        <div class="tl-item"><span class="tl-time">17:00~</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">자유 시간</div><div class="tl-desc">가와라마치 돈키호테까지 2.1km · 힘들면 택시</div></div></div>
-        <div class="tl-item"><span class="tl-time">—</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">가모강 산책</div></div></div>
-        <div class="tl-item"><span class="tl-time">18:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">저녁</div><div class="tl-desc">스키야키 (고급) or 마구로동 — 가격 10배 차이</div></div></div>
-        <div class="tl-item"><span class="tl-time">19:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">가와라마치 돈키호테</div></div></div>
-      </div>
-      <div class="note-box">★ 내일 아침: 비타민음료 + 간식거리 준비</div>
-    </div>
-  </div>
-</div>
-
-<!-- DAY 5 -->
-<div class="day-section" id="day5">
-  <div class="day-card">
-    <div class="day-header">
-      <div class="day-badge badge-home">귀국일</div>
-      <div class="day-title">4월 15일 수요일 — 귀국</div>
-      <div class="day-meta">
-        <div class="meta-chip">🌧 16–22°C · 비</div>
-        <div class="meta-chip">👕 코튼타이즈, 가디건, 바람막이</div>
-      </div>
-    </div>
+  <!-- 3-B -->
+  <div class="plan-panel" id="d3-b">
     <div class="route-bar">
-      <div class="route-bar-title">오늘의 동선</div>
+      <div class="route-bar-title">오늘의 동선 (B)</div>
       <div class="route-stops">
-        <span class="route-stop" style="color:var(--home)">가와라마치</span><span class="route-arrow">🚇</span>
-        <span class="route-stop" style="color:var(--home)">난바</span><span class="route-arrow">🚌</span>
+        <span class="route-stop" style="color:var(--kyoto)">우메다</span>
+        <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.7029,135.4953&destination=35.0085,135.7620&travelmode=transit" target="_blank">🚃 한큐특급</a>
+        <span class="route-stop" style="color:var(--kyoto)">가와라마치</span>
+        <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=35.0085,135.7620&destination=35.0095,135.6726&travelmode=transit" target="_blank">🚌 버스</a>
+        <span class="route-stop" style="color:var(--kyoto)">아라시야마</span>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <span class="tl-time">08:30</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">기상 → 체크아웃 + 교토 출발</div>
+          <div class="tl-desc">한큐 특급 우메다→가와라마치 약 45분</div>
+          <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.7029,135.4953&destination=35.0085,135.7620&travelmode=transit" target="_blank">🚃 대중교통으로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">11:30</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">가와라마치 미쓰이 호텔 도착</div>
+          <div class="tl-desc">짐 맡기고 아라시야마로 이동</div>
+          <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=35.0085,135.7620&destination=35.0095,135.6726&travelmode=transit" target="_blank">🚌 대중교통으로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">13:00</span>
+        <div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div>
+        <div class="tl-body"><div class="tl-name">마루키 베이커리 — 에비샌드</div><div class="tl-desc">아라시야마 도착 후 간식</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">13:30</span>
+        <div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div>
+        <div class="tl-body"><div class="tl-name">아라비카 커피 &amp; 도게츠교</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">13:30</span>
+        <div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div>
+        <div class="tl-body"><div class="tl-name">텐류지</div><div class="tl-desc">~15:00</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">15:00</span>
+        <div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div>
+        <div class="tl-body"><div class="tl-name">치쿠린 (대나무 숲)</div><div class="tl-desc">~16:00</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">16:30</span>
+        <div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">코토이모 — 미타라시 당고</div>
+          <div class="tl-tags"><span class="tl-tag tag-warn">⚠ 17:30 영업 종료</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">저녁①</span>
+        <div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div>
+        <div class="tl-body"><div class="tl-name">아라시야마에서 저녁 (택 1)</div><div class="tl-desc">스테이크 오츠카 or 아라시야마 커리 → 19:00 가와라마치 귀환</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">저녁②</span>
+        <div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">아라시야마 저녁 패스 시</div>
+          <div class="tl-desc">18:30 귀환 → 멘야 이노이치</div>
+          <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=35.0095,135.6726&destination=35.0085,135.7620&travelmode=transit" target="_blank">🚃 대중교통으로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">21:00</span>
+        <div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div>
+        <div class="tl-body"><div class="tl-name">돈키호테 + 편의점</div><div class="tl-desc">~23:00</div></div>
+      </div>
+    </div>
+    <div class="note-box">★ 내일 아침: 비타민음료 챙기기</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════ DAY 4 · 4/14 ═══════════ -->
+<div class="day-section" id="day4">
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-badge badge-kyoto">교토</div>
+    <div class="day-title">4월 14일 화요일</div>
+    <div class="day-meta">
+      <div class="meta-chip">🌧 14–22°C · 비</div>
+      <div class="meta-chip">👕 면바지, 티셔츠, 아우터셔츠</div>
+    </div>
+  </div>
+  <div class="plan-toggle">
+    <button class="plan-btn active-a" id="d4-btn-a" onclick="togglePlan(4,'a')">A안 · 행자교·쇼핑</button>
+    <button class="plan-btn"          id="d4-btn-b" onclick="togglePlan(4,'b')">B안 · 기요미즈데라</button>
+  </div>
+
+  <!-- 4-A -->
+  <div class="plan-panel active" id="d4-a">
+    <div class="route-bar">
+      <div class="route-bar-title">오늘의 동선 (A)</div>
+      <div class="route-stops">
+        <span class="route-stop" style="color:var(--kyoto)">스마트커피</span>
+        <a class="gmap-btn gmap-drive" href="https://www.google.com/maps/dir/?api=1&origin=35.0050,135.7686&destination=35.0270,135.7982&travelmode=driving" target="_blank">🚕 택시</a>
+        <span class="route-stop" style="color:var(--kyoto)">은각사</span>
+        <a class="gmap-btn gmap-drive" href="https://www.google.com/maps/dir/?api=1&origin=35.0215,135.7943&destination=34.9947,135.7847&travelmode=driving" target="_blank">🚕 택시</a>
+        <span class="route-stop" style="color:var(--kyoto)">행자교</span>
+        <a class="gmap-btn gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=34.9947,135.7847&destination=35.0050,135.7686&travelmode=walking" target="_blank">🚶</a>
+        <span class="route-stop" style="color:var(--kyoto)">쇼핑·가모강</span>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item"><span class="tl-time">07:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상</div></div></div>
+      <div class="tl-item">
+        <span class="tl-time">08:00</span>
+        <div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div>
+        <div class="tl-body"><div class="tl-name">스마트커피</div><div class="tl-desc">~09:30</div></div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">09:30</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">택시로 은각사 이동</div>
+          <a class="tl-gmap tl-gmap-drive" href="https://www.google.com/maps/dir/?api=1&origin=35.0050,135.7686&destination=35.0270,135.7982&travelmode=driving" target="_blank">🚕 택시 경로로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item"><span class="tl-time">10:00</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">은각사(지쇼지) 관람</div><div class="tl-desc">~12:00</div></div></div>
+      <div class="tl-item">
+        <span class="tl-time">12:00</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">철학의 길 → 택시로 점심 이동</div>
+          <a class="tl-gmap tl-gmap-drive" href="https://www.google.com/maps/dir/?api=1&origin=35.0215,135.7943&destination=35.0140,135.7900&travelmode=driving" target="_blank">🚕 택시 경로로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">야마모토 멘조우</div><div class="tl-desc">~14:00</div></div></div>
+      <div class="tl-item">
+        <span class="tl-time">14:30</span>
+        <div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">행자교</div>
+          <div class="tl-desc">도보 1.2km · 줄 길면 → 모모타로 진</div>
+          <a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=35.0140,135.7900&destination=34.9947,135.7847&travelmode=walking" target="_blank">🚶 도보로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item"><span class="tl-time">15:00</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">우메조노 — 미타라시 당고</div><div class="tl-desc">~15:30</div></div></div>
+      <div class="tl-item"><span class="tl-time">15:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">가와라마치 유니클로 + 나이키</div><div class="tl-desc">~17:30</div></div></div>
+      <div class="tl-item"><span class="tl-time">17:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">BAL 쇼핑</div><div class="tl-desc">~19:30</div></div></div>
+      <div class="tl-item"><span class="tl-time">20:00</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">저녁 — 이자카야 + 피자</div><div class="tl-desc">~21:00</div></div></div>
+      <div class="tl-item"><span class="tl-time">—</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">가모강 산책</div></div></div>
+      <div class="tl-item"><span class="tl-time">21:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">가와라마치 돈키호테</div><div class="tl-desc">~22:30</div></div></div>
+    </div>
+    <div class="note-box">★ 내일 아침: 비타민음료 + 간식거리 준비</div>
+  </div>
+
+  <!-- 4-B -->
+  <div class="plan-panel" id="d4-b">
+    <div class="route-bar">
+      <div class="route-bar-title">오늘의 동선 (B)</div>
+      <div class="route-stops">
+        <span class="route-stop" style="color:var(--kyoto)">스마트커피</span>
+        <a class="gmap-btn gmap-drive" href="https://www.google.com/maps/dir/?api=1&origin=35.0050,135.7686&destination=35.0270,135.7982&travelmode=driving" target="_blank">🚕 택시</a>
+        <span class="route-stop" style="color:var(--kyoto)">은각사</span>
+        <a class="gmap-btn gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=35.0215,135.7943&destination=34.9947,135.7847&travelmode=walking" target="_blank">🚶 2.2km</a>
+        <span class="route-stop" style="color:var(--kyoto)">기요미즈데라</span>
+        <a class="gmap-btn gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=34.9947,135.7847&destination=35.0050,135.7686&travelmode=walking" target="_blank">🚶·🚕</a>
+        <span class="route-stop" style="color:var(--kyoto)">가모강·저녁</span>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item"><span class="tl-time">07:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상</div></div></div>
+      <div class="tl-item"><span class="tl-time">08:00</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">스마트커피</div><div class="tl-desc">~09:30</div></div></div>
+      <div class="tl-item">
+        <span class="tl-time">09:30</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">택시로 은각사 이동</div>
+          <a class="tl-gmap tl-gmap-drive" href="https://www.google.com/maps/dir/?api=1&origin=35.0050,135.7686&destination=35.0270,135.7982&travelmode=driving" target="_blank">🚕 택시 경로로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item"><span class="tl-time">10:00</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">은각사(지쇼지) 관람</div><div class="tl-desc">~12:00</div></div></div>
+      <div class="tl-item">
+        <span class="tl-time">12:00</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">철학의 길 → 택시로 점심</div>
+          <a class="tl-gmap tl-gmap-drive" href="https://www.google.com/maps/dir/?api=1&origin=35.0215,135.7943&destination=35.0140,135.7900&travelmode=driving" target="_blank">🚕 택시 경로로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">야마모토 멘조우</div><div class="tl-desc">~14:00</div></div></div>
+      <div class="tl-item">
+        <span class="tl-time">14:45</span>
+        <div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">기요미즈데라 투어</div>
+          <div class="tl-desc">도보 2.2km (35분) · ~16:00</div>
+          <a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=35.0140,135.7900&destination=34.9947,135.7847&travelmode=walking" target="_blank">🚶 도보로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item"><span class="tl-time">16:00</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">Fumon-an &amp; Fumon Chaya</div><div class="tl-desc">~17:00 · 와라비모찌, 말차파르페</div></div></div>
+      <div class="tl-item">
+        <span class="tl-time">17:00~</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">자유 시간 → 가와라마치 이동</div>
+          <div class="tl-desc">도보 2.1km or 택시</div>
+          <a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=34.9947,135.7847&destination=35.0050,135.7686&travelmode=walking" target="_blank">🚶 도보로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item"><span class="tl-time">—</span><div class="tl-icon icon-sight"><svg width="16" height="16"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name">가모강 산책</div></div></div>
+      <div class="tl-item"><span class="tl-time">18:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">저녁</div><div class="tl-desc">스키야키 (고급) or 마구로동 — 가격 10배 차이</div></div></div>
+      <div class="tl-item"><span class="tl-time">19:30</span><div class="tl-icon icon-shop"><svg width="16" height="16"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">가와라마치 돈키호테</div></div></div>
+    </div>
+    <div class="note-box">★ 내일 아침: 비타민음료 + 간식거리 준비</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════ DAY 5 · 4/15 ═══════════ -->
+<div class="day-section" id="day5">
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-badge badge-home">귀국일</div>
+    <div class="day-title">4월 15일 수요일 — 귀국</div>
+    <div class="day-meta">
+      <div class="meta-chip">🌤 14–27°C</div>
+    </div>
+  </div>
+  <div class="plan-toggle">
+    <button class="plan-btn active-a" id="d5-btn-a" onclick="togglePlan(5,'a')">A안 · 난카이 라피트</button>
+    <button class="plan-btn"          id="d5-btn-b" onclick="togglePlan(5,'b')">B안 · 리무진버스</button>
+  </div>
+
+  <!-- 5-A -->
+  <div class="plan-panel active" id="d5-a">
+    <div class="route-bar">
+      <div class="route-bar-title">오늘의 동선 (A)</div>
+      <div class="route-stops">
+        <span class="route-stop" style="color:var(--home)">가와라마치</span>
+        <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=35.0050,135.7686&destination=34.6661,135.5015&travelmode=transit" target="_blank">🚇 전철</a>
+        <span class="route-stop" style="color:var(--home)">난바</span>
+        <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.6661,135.5015&destination=34.4320,135.2366&travelmode=transit" target="_blank">🚃 난카이 라피트</a>
+        <span class="route-stop" style="color:var(--home)">간사이 공항</span>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item"><span class="tl-time">07:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상 → 08:20까지 짐 정리</div></div></div>
+      <div class="tl-item"><span class="tl-time">08:45</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">이노다커피</div><div class="tl-desc">~10:20</div></div></div>
+      <div class="tl-item"><span class="tl-time">10:45</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">체크아웃 → 난바로 이동</div><div class="tl-desc">가와라마치→난바 전철 약 35분 / 코인로커 사전 확인</div><a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=35.0050,135.7686&destination=34.6661,135.5015&travelmode=transit" target="_blank">🚇 대중교통으로 열기</a></div></div>
+      <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">무겐라멘</div><div class="tl-desc">~14:30</div></div></div>
+      <div class="tl-item"><span class="tl-time">14:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">편의점 요깃거리</div><div class="tl-desc">~15:30</div></div></div>
+      <div class="tl-item"><span class="tl-time">15:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">난카이 난바역으로 이동</div><div class="tl-desc">~15:45</div><a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=34.6687,135.5013&destination=34.6661,135.5015&travelmode=walking" target="_blank">🚶 도보로 열기</a></div></div>
+      <div class="tl-item">
+        <span class="tl-time">16:00</span>
+        <div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div>
+        <div class="tl-body">
+          <div class="tl-name">난카이 라피트 탑승</div>
+          <div class="tl-desc">16:00 → 16:41 간사이공항역 도착</div>
+          <div class="tl-tags"><span class="tl-tag tag-tip">💡 사전 지정석 예약 추천</span></div>
+          <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.6661,135.5015&destination=34.4320,135.2366&travelmode=transit" target="_blank">🚃 대중교통으로 열기</a>
+        </div>
+      </div>
+      <div class="tl-item"><span class="tl-time">17:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">간사이 공항 도착</div><div class="tl-desc">✈ 비행기 19:45 출발</div></div></div>
+    </div>
+    <div class="note-box">★ 사전 확인: 가와라마치→난바 교통편 / 코인로커 위치 / 난카이 라피트 좌석 예약</div>
+  </div>
+
+  <!-- 5-B -->
+  <div class="plan-panel" id="d5-b">
+    <div class="route-bar">
+      <div class="route-bar-title">오늘의 동선 (B)</div>
+      <div class="route-stops">
+        <span class="route-stop" style="color:var(--home)">가와라마치</span>
+        <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=35.0050,135.7686&destination=34.6687,135.5013&travelmode=transit" target="_blank">🚇 전철</a>
+        <span class="route-stop" style="color:var(--home)">난바</span>
+        <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.6687,135.5013&destination=34.4320,135.2366&travelmode=transit" target="_blank">🚌 리무진</a>
         <span class="route-stop" style="color:var(--home)">간사이 공항</span>
       </div>
     </div>
     <div class="timeline">
       <div class="tl-item"><span class="tl-time">07:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상 → 08:20까지 짐 정리</div></div></div>
       <div class="tl-item"><span class="tl-time">08:45</span><div class="tl-icon icon-cafe"><svg width="16" height="16"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">이노다커피</div><div class="tl-desc">~10:30</div></div></div>
-      <div class="tl-item"><span class="tl-time">11:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">체크아웃 → 난바로 이동</div><div class="tl-desc">가와라마치→난바 전철 약 35분 / 코인로커 사전 확인</div></div></div>
+      <div class="tl-item"><span class="tl-time">11:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">체크아웃 → 난바로 이동</div><div class="tl-desc">가와라마치→난바 전철 약 35분</div><a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=35.0050,135.7686&destination=34.6687,135.5013&travelmode=transit" target="_blank">🚇 대중교통으로 열기</a></div></div>
       <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">무겐라멘</div><div class="tl-desc">~14:30</div></div></div>
       <div class="tl-item"><span class="tl-time">14:30</span><div class="tl-icon icon-eat"><svg width="16" height="16"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name">오니기리 고리짱</div><div class="tl-desc">~15:00</div></div></div>
-      <div class="tl-item"><span class="tl-time">15:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">역 이동 → 15:30 공항 출발</div></div></div>
+      <div class="tl-item"><span class="tl-time">15:00</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">역 이동 → 15:30 공항 출발</div><a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.6687,135.5013&destination=34.4320,135.2366&travelmode=transit" target="_blank">🚌 대중교통으로 열기</a></div></div>
       <div class="tl-item"><span class="tl-time">17:30</span><div class="tl-icon icon-move"><svg width="16" height="16"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">간사이 공항 도착</div></div></div>
     </div>
-    <div class="note-box">★ 사전 확인: 가와라마치→난바, 난바→간사이 교통편 / 코인로커 위치·사이즈 / 짐 맡기는 곳</div>
+    <div class="note-box">★ 사전 확인: 가와라마치→난바, 난바→간사이 교통편 / 코인로커 위치·사이즈</div>
   </div>
+</div>
 </div>
 
 <script>
 const DAYS={
-  1:{color:'#1d4ed8',stops:[{ll:[34.4320,135.2366],name:'간사이 공항',time:'17:00',desc:'✈ 도착 · ICOCA 발급'},{ll:[34.7029,135.4953],name:'우메다',time:'19:30',desc:'🚌 리무진 약 50분'}]},
-  2:{color:'#1d4ed8',stops:[{ll:[34.7029,135.4953],name:'루쿠아·하나다코',time:'10:00',desc:'아침 + 쇼핑'},{ll:[34.7028,135.4985],name:'한큐 멘즈',time:'15:30',desc:'도보 5분'},{ll:[34.6687,135.5013],name:'도톤보리',time:'19:00',desc:'🚇 미도스지선 10분'}]},
-  '3a':{color:'#b45309',stops:[{ll:[34.7029,135.4953],name:'우메다',time:'08:30',desc:'한큐 특급 출발'},{ll:[35.0085,135.7620],name:'가와라마치 호텔',time:'10:00',desc:'짐 맡기기'},{ll:[34.9947,135.7847],name:'기요미즈데라',time:'13:00',desc:'도보 1.8km'},{ll:[35.0096,135.7598],name:'신풍관',time:'17:30',desc:'⚠ 20시 마감'}]},
-  '3b':{color:'#166534',stops:[{ll:[34.7029,135.4953],name:'우메다',time:'08:30',desc:'한큐 특급 출발'},{ll:[35.0085,135.7620],name:'가와라마치 호텔',time:'11:30',desc:'짐 맡기기'},{ll:[35.0095,135.6726],name:'아라시야마·도게츠교',time:'13:30',desc:'버스 or 전철'},{ll:[35.0147,135.6719],name:'텐류지',time:'13:30',desc:''},{ll:[35.0174,135.6718],name:'치쿠린',time:'15:00',desc:'대나무 숲'}]},
-  '4a':{color:'#166534',stops:[{ll:[35.0050,135.7686],name:'가와라마치',time:'08:00',desc:'스마트커피'},{ll:[35.0270,135.7982],name:'은각사',time:'10:00',desc:'🚕 택시'},{ll:[35.0215,135.7943],name:'철학의 길',time:'12:00',desc:'도보'},{ll:[34.9947,135.7847],name:'행자교',time:'14:30',desc:'🚕 택시'},{ll:[34.9805,135.7672],name:'가모강',time:'21:00',desc:'산책'}]},
-  '4b':{color:'#166534',stops:[{ll:[35.0050,135.7686],name:'가와라마치',time:'08:00',desc:'스마트커피'},{ll:[35.0270,135.7982],name:'은각사',time:'10:00',desc:'🚕 택시'},{ll:[34.9947,135.7847],name:'기요미즈데라',time:'14:45',desc:'도보 2.2km'},{ll:[34.9805,135.7672],name:'가모강·저녁',time:'18:30',desc:''}]},
-  5:{color:'#be123c',stops:[{ll:[35.0050,135.7686],name:'가와라마치',time:'11:00',desc:'출발'},{ll:[34.6687,135.5013],name:'난바',time:'12:30',desc:'🚇 전철 35분'},{ll:[34.4320,135.2366],name:'간사이 공항',time:'17:30',desc:'🚌 리무진'}]}
+  1:{color:'#1d4ed8',stops:[
+    {ll:[34.4320,135.2366],name:'간사이 공항',time:'17:00',desc:'✈ 도착 · ICOCA 발급'},
+    {ll:[34.7029,135.4953],name:'우메다',time:'19:30',desc:'🚌 리무진 버스 약 50분'}
+  ]},
+  2:{color:'#1d4ed8',stops:[
+    {ll:[34.7029,135.4953],name:'하나다코·루쿠아',time:'10:00',desc:'아침 + 쇼핑'},
+    {ll:[34.7028,135.4985],name:'한큐 멘즈',time:'16:30',desc:'🚶 도보 5분'},
+    {ll:[34.6687,135.5013],name:'도톤보리',time:'19:00',desc:'🚇 미도스지선 10분'}
+  ]},
+  '3a':{color:'#b45309',stops:[
+    {ll:[34.7029,135.4953],name:'우메다',time:'08:30',desc:'한큐 특급 출발'},
+    {ll:[35.0085,135.7620],name:'가와라마치 호텔',time:'10:00',desc:'짐 맡기기'},
+    {ll:[34.9947,135.7847],name:'기요미즈데라',time:'13:00',desc:'🚶 도보 1.8km'},
+    {ll:[35.0096,135.7598],name:'신풍관',time:'17:30',desc:'⚠ 20시 마감'}
+  ]},
+  '3b':{color:'#166534',stops:[
+    {ll:[34.7029,135.4953],name:'우메다',time:'08:30',desc:'한큐 특급 출발'},
+    {ll:[35.0085,135.7620],name:'가와라마치 호텔',time:'11:30',desc:'짐 맡기기'},
+    {ll:[35.0095,135.6726],name:'아라시야마',time:'13:00',desc:'🚌 버스 이동'},
+    {ll:[35.0147,135.6719],name:'텐류지',time:'13:30',desc:''},
+    {ll:[35.0174,135.6718],name:'치쿠린',time:'15:00',desc:'대나무 숲'}
+  ]},
+  '4a':{color:'#166534',stops:[
+    {ll:[35.0050,135.7686],name:'가와라마치',time:'08:00',desc:'스마트커피'},
+    {ll:[35.0270,135.7982],name:'은각사',time:'10:00',desc:'🚕 택시'},
+    {ll:[35.0215,135.7943],name:'철학의 길',time:'12:00',desc:'🚶 도보'},
+    {ll:[34.9947,135.7847],name:'행자교',time:'14:30',desc:'🚕 택시 후 도보'},
+    {ll:[34.9805,135.7672],name:'가모강',time:'21:00',desc:'산책'}
+  ]},
+  '4b':{color:'#166534',stops:[
+    {ll:[35.0050,135.7686],name:'가와라마치',time:'08:00',desc:'스마트커피'},
+    {ll:[35.0270,135.7982],name:'은각사',time:'10:00',desc:'🚕 택시'},
+    {ll:[34.9947,135.7847],name:'기요미즈데라',time:'14:45',desc:'🚶 도보 2.2km'},
+    {ll:[34.9805,135.7672],name:'가모강·저녁',time:'18:30',desc:''}
+  ]},
+  '5a':{color:'#be123c',stops:[
+    {ll:[35.0050,135.7686],name:'가와라마치',time:'10:45',desc:'체크아웃'},
+    {ll:[34.6661,135.5015],name:'난카이 난바역',time:'15:45',desc:'🚇 전철 35분'},
+    {ll:[34.4320,135.2366],name:'간사이 공항',time:'17:00',desc:'🚃 라피트 16:00→16:41'}
+  ]},
+  '5b':{color:'#be123c',stops:[
+    {ll:[35.0050,135.7686],name:'가와라마치',time:'11:00',desc:'체크아웃'},
+    {ll:[34.6687,135.5013],name:'난바',time:'12:30',desc:'🚇 전철 35분'},
+    {ll:[34.4320,135.2366],name:'간사이 공항',time:'17:30',desc:'🚌 리무진버스'}
+  ]}
 };
 
 const map=L.map('map',{zoomControl:true,attributionControl:false});
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(map);
 L.control.attribution({prefix:false,position:'bottomleft'}).addTo(map);
 
-let layers={},planState={3:'a',4:'a'};
+let layers={},planState={3:'a',4:'a',5:'a'};
 
 function makeIcon(n,c){
   return L.divIcon({className:'',iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-20],
-    html:`<div style="width:32px;height:32px;border-radius:50%;background:${c};border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:700">${n}</div>`});
+    html:`<div style="width:32px;height:32px;border-radius:50%;background:${c};border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:700;font-family:-apple-system,sans-serif">${n}</div>`});
 }
 
 function buildLayer(key){
-  const d=DAYS[key];if(!d)return L.layerGroup();
-  const g=L.layerGroup(),lls=d.stops.map(s=>s.ll);
-  if(lls.length>1)L.polyline(lls,{color:d.color,weight:3.5,opacity:.85}).addTo(g);
+  const d=DAYS[key]; if(!d) return L.layerGroup();
+  const g=L.layerGroup(), lls=d.stops.map(s=>s.ll);
+  if(lls.length>1) L.polyline(lls,{color:d.color,weight:3.5,opacity:.85}).addTo(g);
   d.stops.forEach((s,i)=>{
+    const gmapUrl=`https://www.google.com/maps/search/?api=1&query=${s.ll[0]},${s.ll[1]}`;
     L.marker(s.ll,{icon:makeIcon(i+1,d.color)})
-     .bindPopup(`<div style="font-family:-apple-system,sans-serif;min-width:130px"><b style="font-size:15px">${s.name}</b><div style="color:#555;margin-top:4px;font-size:13px">${s.time}</div>${s.desc?`<div style="color:#777;font-size:13px;margin-top:2px">${s.desc}</div>`:''}</div>`)
+     .bindPopup(`<div style="font-family:-apple-system,sans-serif;min-width:140px">
+       <b style="font-size:15px">${s.name}</b>
+       <div style="color:#555;margin-top:3px;font-size:13px">${s.time}</div>
+       ${s.desc?`<div style="color:#777;font-size:13px;margin-top:2px">${s.desc}</div>`:''}
+       <a href="${gmapUrl}" target="_blank" style="display:inline-block;margin-top:7px;font-size:12px;font-weight:700;padding:4px 10px;background:#dbeafe;color:#1d4ed8;border-radius:8px;text-decoration:none">🗺 구글맵으로 열기</a>
+     </div>`)
      .addTo(g);
   });
   return g;
 }
 
-['1','2','3a','3b','4a','4b','5'].forEach(k=>{layers[k]=buildLayer(k);});
+Object.keys(DAYS).forEach(k=>{layers[k]=buildLayer(k);});
+showMapKey('1');
 
 function showMapKey(key){
   Object.values(layers).forEach(l=>{if(map.hasLayer(l))map.removeLayer(l);});
   if(!layers[key])return;
   layers[key].addTo(map);
   const pts=DAYS[key].stops.map(s=>s.ll);
-  if(pts.length===1)map.setView(pts[0],14);
+  if(pts.length===1) map.setView(pts[0],14);
   else map.fitBounds(pts,{padding:[50,50]});
 }
-
-showMapKey('1');
 
 function switchDay(d){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -396,7 +805,7 @@ function switchDay(d){
   document.querySelectorAll('.day-section').forEach(s=>s.classList.remove('active'));
   document.getElementById(`day${d}`).classList.add('active');
   document.getElementById('map-hint').style.display='none';
-  const key=(d===3)?`3${planState[3]}`:(d===4)?`4${planState[4]}`:String(d);
+  const key= d===3?`3${planState[3]}`: d===4?`4${planState[4]}`: d===5?`5${planState[5]}`:String(d);
   showMapKey(key);
   document.querySelector('.map-wrap').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -404,8 +813,9 @@ function switchDay(d){
 function togglePlan(day,plan){
   planState[day]=plan;
   const other=plan==='a'?'b':'a';
-  document.getElementById(`d${day}-btn-a`).className='plan-btn'+(plan==='a'?' active-a':'');
-  document.getElementById(`d${day}-btn-b`).className='plan-btn'+(plan==='b'?' active-b':'');
+  const clsA=plan==='a'?'active-a':'', clsB=plan==='b'?'active-b':'';
+  document.getElementById(`d${day}-btn-a`).className='plan-btn '+(plan==='a'?'active-a':'');
+  document.getElementById(`d${day}-btn-b`).className='plan-btn '+(plan==='b'?'active-b':'');
   document.getElementById(`d${day}-${plan}`).classList.add('active');
   document.getElementById(`d${day}-${other}`).classList.remove('active');
   showMapKey(`${day}${plan}`);
