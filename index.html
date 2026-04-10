@@ -152,6 +152,43 @@ a.meta-chip:hover{background:#e5e7eb}
 .cl-item.done .cl-chk-ic{display:block}
 .cl-item-lbl{font-size:13.5px;color:#1a1a1a;flex:1;line-height:1.4}
 .cl-done-msg{text-align:center;padding:12px;font-size:14px;font-weight:700;color:#c0392b;display:none}
+
+/* ── 호텔 행 ── */
+.hotel-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px}
+.hotel-chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:20px;background:#eff6ff;color:#1d4ed8;text-decoration:none;border:1px solid #bfdbfe}
+.hotel-chip:hover{background:#dbeafe}
+.voucher-chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:20px;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;cursor:pointer;font-family:inherit}
+.voucher-chip:active{background:#dcfce7}
+
+/* ── 팝업 모달 ── */
+.popup-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:20px}
+.popup-overlay.open{display:flex}
+.popup-sheet{background:white;border-radius:18px;max-width:480px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:popIn .2s ease}
+@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.popup-header{padding:18px 20px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:12px;position:sticky;top:0;background:white;z-index:1;border-radius:18px 18px 0 0}
+.popup-title{font-size:17px;font-weight:700;flex:1}
+.popup-close{font-size:22px;color:#aaa;background:none;border:none;cursor:pointer;padding:4px 8px;line-height:1}
+.popup-body{padding:16px 20px 24px}
+
+/* ── 예약 카드 ── */
+.rsv-header{background:linear-gradient(135deg,#1a1a2e,#16213e);color:white;border-radius:12px;padding:16px;margin-bottom:14px;text-align:center}
+.rsv-header .rsv-rest{font-size:17px;font-weight:700;margin-bottom:4px}
+.rsv-header .rsv-sub{font-size:12px;opacity:.7}
+.rsv-num{font-size:18px;font-weight:700;color:#fbbf24;margin-top:8px;letter-spacing:1px}
+.rsv-row{display:flex;padding:10px 0;border-bottom:1px solid #f5f5f5;gap:12px}
+.rsv-row:last-child{border-bottom:none}
+.rsv-lbl{font-size:12px;color:#888;width:80px;flex-shrink:0;padding-top:1px}
+.rsv-val{font-size:14px;color:#1a1a1a;flex:1;line-height:1.5}
+.rsv-badge{display:inline-block;background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;margin-top:3px}
+.rsv-warn{display:inline-block;background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;margin-top:3px}
+
+/* ── 호텔 바우처 카드 ── */
+.htl-header{border-radius:12px;padding:16px;margin-bottom:14px;text-align:center}
+.htl-osaka{background:linear-gradient(135deg,#1d4ed8,#3b82f6)}
+.htl-kyoto{background:linear-gradient(135deg,#166534,#22c55e)}
+.htl-header .htl-name{font-size:16px;font-weight:700;color:white;margin-bottom:3px}
+.htl-header .htl-sub{font-size:12px;color:rgba(255,255,255,.75)}
+.htl-bnum{font-size:14px;font-weight:700;color:#fde68a;margin-top:6px;letter-spacing:0.5px}
 </style>
 </head>
 <body>
@@ -243,7 +280,7 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="day-badge badge-osaka">오사카</div>
     <div class="day-title">4월 11일 토요일 — 도착일</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://www.data.jma.go.jp/multi/yoho/yoho_detail.html?code=270000&lang=kr" target="_blank"><span id="wx-day1">☁ 11–18°C · 흐림</span> ↗</a>
+      <a class="meta-chip" href="https://www.google.com/search?q=오사카+날씨+주간&hl=ko" target="_blank"><span id="wx-day1">☁ 11–18°C · 흐림</span> ↗</a>
       <div class="meta-chip">👕 편한 면바지, 면 티셔츠, 아우터셔츠</div>
     </div>
   </div>
@@ -251,7 +288,7 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="route-bar-title">오늘의 동선</div>
     <div class="route-stops">
       <span class="route-stop" style="color:var(--osaka)">간사이 공항</span>
-      <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/%EA%B0%84%EC%82%AC%EC%9D%B4+%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD+%EC%9D%BC%EB%B3%B8+%E3%80%92549-0001+Osaka,+Izumisano,+Senshukukokita,+1%E7%95%AA%E5%9C%B0/%ED%98%B8%ED%85%94+%ED%95%9C%ED%81%90+%EB%A0%88%EC%8A%A4%ED%8C%8C%EC%9D%B4%EC%96%B4+%EC%98%A4%EC%82%AC%EC%B9%B4+%EC%9D%BC%EB%B3%B8+%E3%80%92530-0011+Osaka,+Kita+Ward,+Ofukacho,+1%E2%88%921/@34.5464874,135.2153834,11z/data=!4m14!4m13!1m5!1m1!1s0x6000b91323cdfaf7:0xf171a79f8d908f88!2m2!1d135.2366019!2d34.4319994!1m5!1m1!1s0x6000e7612e199f2b:0x3f1fd005ba7a2fce!2m2!1d135.4961473!2d34.7047014!3e3?entry=ttu&g_ep=EgoyMDI2MDQwNy4wIKXMDSoASAFQAw%3D%3D" target="_blank">🚌 리무진버스</a>
+      <a class="gmap-btn gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=%EA%B0%84%EC%82%AC%EC%9D%B4+%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD&origin_place_id=ChIJ9_rNIxO5AGARiI-QjZ-ncfE&destination=%ED%98%B8%ED%85%94+%ED%95%9C%ED%81%90+%EB%A0%88%EC%8A%A4%ED%8C%8C%EC%9D%B4%EC%96%B4+%EC%98%A4%EC%82%AC%EC%B9%B4&destination_place_id=ChIJK58ZLmHnAGARzi96ugXQHz8&travelmode=transit" target="_blank">🚌 리무진버스</a>
       <span class="route-stop" style="color:var(--osaka)">호텔 한큐 레스파이어</span>
     </div>
   </div>
@@ -267,7 +304,7 @@ a.meta-chip:hover{background:#e5e7eb}
       <div class="tl-body">
         <div class="tl-name">리무진 버스 탑승</div>
         <div class="tl-desc">19:30–20:30 호텔 도착 / 시간 남으면 <a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Hanadako%20Umeda&query_place_id=ChIJ_5Ip7-zmAGAReRZN8gzci50" target="_blank">하나다코</a> 네기타코야키 8알</div>
-        <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/%EA%B0%84%EC%82%AC%EC%9D%B4+%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD+%EC%9D%BC%EB%B3%B8+%E3%80%92549-0001+Osaka,+Izumisano,+Senshukukokita,+1%E7%95%AA%E5%9C%B0/%ED%98%B8%ED%85%94+%ED%95%9C%ED%81%90+%EB%A0%88%EC%8A%A4%ED%8C%8C%EC%9D%B4%EC%96%B4+%EC%98%A4%EC%82%AC%EC%B9%B4+%EC%9D%BC%EB%B3%B8+%E3%80%92530-0011+Osaka,+Kita+Ward,+Ofukacho,+1%E2%88%921/@34.5464874,135.2153834,11z/data=!4m14!4m13!1m5!1m1!1s0x6000b91323cdfaf7:0xf171a79f8d908f88!2m2!1d135.2366019!2d34.4319994!1m5!1m1!1s0x6000e7612e199f2b:0x3f1fd005ba7a2fce!2m2!1d135.4961473!2d34.7047014!3e3?entry=ttu&g_ep=EgoyMDI2MDQwNy4wIKXMDSoASAFQAw%3D%3D" target="_blank">🚌 대중교통으로 열기</a>
+        <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=%EA%B0%84%EC%82%AC%EC%9D%B4+%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD&origin_place_id=ChIJ9_rNIxO5AGARiI-QjZ-ncfE&destination=%ED%98%B8%ED%85%94+%ED%95%9C%ED%81%90+%EB%A0%88%EC%8A%A4%ED%8C%8C%EC%9D%B4%EC%96%B4+%EC%98%A4%EC%82%AC%EC%B9%B4&destination_place_id=ChIJK58ZLmHnAGARzi96ugXQHz8&travelmode=transit" target="_blank">🚌 대중교통으로 열기</a>
       </div>
     </div>
     <div class="tl-item">
@@ -275,7 +312,7 @@ a.meta-chip:hover{background:#e5e7eb}
       <div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div>
       <div class="tl-body">
         <div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E8%82%89%E3%83%9B%E3%83%AB%E3%83%A2%E3%83%B3%E6%AD%A6%E5%A3%AB%E9%81%93+%E5%A4%A7%E9%98%AA%E6%A2%85%E7%94%B0%E3%81%AE%E3%81%99%E3%81%BF%E3%81%A3%E3%81%93%E5%BA%97" target="_blank">야키니쿠 부시도우 스미코 우메다</a></div>
-        <div class="tl-tags"><span class="tl-tag tag-book">★ 예약 완료</span></div>
+        <div class="tl-tags"><span class="tl-tag tag-book" onclick="showRestaurantBooking()" style="cursor:pointer">★ 예약 완료 (탭해서 확인)</span></div>
       </div>
     </div>
     <div class="tl-item">
@@ -289,7 +326,20 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="tl-item">
       <span class="tl-time">24:00</span>
       <div class="tl-icon icon-sleep"><svg width="22" height="22"><use href="#ic-sleep"/></svg></div>
-      <div class="tl-body"><div class="tl-name">취침</div><div class="tl-desc">24시 전 목표</div></div>
+      <div class="tl-body">
+        <div class="tl-name">취침</div>
+        <div class="tl-desc">24시 전 목표</div>
+        <div class="hotel-row">
+          <a class="hotel-chip" href="https://www.google.com/maps/search/?api=1&query=Hotel%20Hankyu%20RESPIRE%20OSAKA&query_place_id=ChIJK58ZLmHnAGARzi96ugXQHz8" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 14 14"><path d="M7 1 Q11 1 11 5 Q11 9 7 13 Q3 9 3 5 Q3 1 7 1Z" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="7" cy="5" r="1.5" fill="currentColor"/></svg>
+            🏨 한큐 레스파이어 오사카
+          </a>
+          <button class="voucher-chip" onclick='showVoucher("osaka")'>
+            <svg width="13" height="13" viewBox="0 0 14 14"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><line x1="4.5" y1="5" x2="9.5" y2="5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="9.5" y2="7.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="10" x2="7.5" y2="10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+            예약정보
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -302,7 +352,7 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="day-badge badge-osaka">오사카</div>
     <div class="day-title">4월 12일 일요일</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://www.data.jma.go.jp/multi/yoho/yoho_detail.html?code=270000&lang=kr" target="_blank"><span id="wx-day2">⛅ 13–21°C · 흐림</span> ↗</a>
+      <a class="meta-chip" href="https://www.google.com/search?q=오사카+날씨+주간&hl=ko" target="_blank"><span id="wx-day2">⛅ 13–21°C · 흐림</span> ↗</a>
     </div>
   </div>
   <div class="route-bar">
@@ -326,7 +376,24 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="tl-item"><span class="tl-time">19:00</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Gyukatsu%20Tomita%20Dotonbori&query_place_id=ChIJxwgCUhPnAGARoz8_83liVEk" target="_blank">규카츠 토미타</a></div><div class="tl-desc">~20:30</div></div></div>
     <div class="tl-item"><span class="tl-time">21:00</span><div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">우메다 귀환</div><a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.6687,135.5013&destination=34.7029,135.4953&travelmode=transit" target="_blank">🚇 대중교통으로 열기</a></div></div>
     <div class="tl-item"><span class="tl-time">21:00</span><div class="tl-icon icon-shop"><svg width="22" height="22"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Don%20Quijote%20Umeda&query_place_id=ChIJjcj6Z5PmAGARU90PonEJIls" target="_blank">돈키호테 우메다</a> + 편의점</div><div class="tl-desc">~22:30 / 1일차에 샀으면 가볍게</div></div></div>
-    <div class="tl-item"><span class="tl-time">24:30</span><div class="tl-icon icon-sleep"><svg width="22" height="22"><use href="#ic-sleep"/></svg></div><div class="tl-body"><div class="tl-name">취침</div></div></div>
+    <div class="tl-item">
+      <span class="tl-time">24:30</span>
+      <div class="tl-icon icon-sleep"><svg width="22" height="22"><use href="#ic-sleep"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">취침</div>
+        
+        <div class="hotel-row">
+          <a class="hotel-chip" href="https://www.google.com/maps/search/?api=1&query=Hotel%20Hankyu%20RESPIRE%20OSAKA&query_place_id=ChIJK58ZLmHnAGARzi96ugXQHz8" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 14 14"><path d="M7 1 Q11 1 11 5 Q11 9 7 13 Q3 9 3 5 Q3 1 7 1Z" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="7" cy="5" r="1.5" fill="currentColor"/></svg>
+            🏨 한큐 레스파이어 오사카
+          </a>
+          <button class="voucher-chip" onclick='showVoucher("osaka")'>
+            <svg width="13" height="13" viewBox="0 0 14 14"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><line x1="4.5" y1="5" x2="9.5" y2="5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="9.5" y2="7.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="10" x2="7.5" y2="10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+            예약정보
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="note-box">★ 내일 아침: 비타민음료 + 커피 + 간단한 요깃거리 준비</div>
 </div>
@@ -339,7 +406,7 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="day-badge badge-move">이동일</div>
     <div class="day-title">4월 13일 월요일 — 오사카→교토</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://www.data.jma.go.jp/multi/yoho/yoho_detail.html?code=260010&lang=kr" target="_blank"><span id="wx-day3">🌦 14–22°C · 오후부터 비</span> ↗</a>
+      <a class="meta-chip" href="https://www.google.com/search?q=교토+날씨+주간&hl=ko" target="_blank"><span id="wx-day3">🌦 14–22°C · 오후부터 비</span> ↗</a>
     </div>
   </div>
   <div class="route-bar">
@@ -358,7 +425,7 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="tl-item"><span class="tl-time">07:30</span><div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상 — 편의점 아침으로 간단히 요기</div></div></div>
     <div class="tl-item"><span class="tl-time">08:30</span><div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">체크아웃 + 교토 출발</div><div class="tl-desc">한큐 특급 우메다→가와라마치 약 45분</div><a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=34.7047,135.4961&destination=35.0085,135.7620&travelmode=transit" target="_blank">🚃 대중교통으로 열기</a></div></div>
     <div class="tl-item"><span class="tl-time">10:00</span><div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">가와라마치 미쓰이 호텔 도착</div><div class="tl-desc">짐 맡기기</div></div></div>
-    <div class="tl-item"><span class="tl-time">10:15</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Men-ya%20Inoichi%20Kyoto&query_place_id=ChIJufyODr4IAWARNVu7xBbRG2w" target="_blank">멘야 이노이치</a></div><div class="tl-desc">11시 오픈 · ~12:00</div></div></div>
+    <div class="tl-item"><span class="tl-time">11:00</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Men-ya%20Inoichi%20Kyoto&query_place_id=ChIJufyODr4IAWARNVu7xBbRG2w" target="_blank">멘야 이노이치</a></div><div class="tl-desc">11시 오픈 · ~12:00</div></div></div>
     <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-cafe"><svg width="22" height="22"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name">커피 테이크아웃 후 <a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Kiyomizudera&query_place_id=ChIJB_vchdMIAWARujTEUIZlr2I" target="_blank">기요미즈데라</a> 출발</div><div class="tl-desc">도보 1.8km</div><a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=35.0085,135.7620&destination=34.9947,135.7847&travelmode=walking" target="_blank">🚶 도보로 열기</a></div></div>
     <div class="tl-item"><span class="tl-time">13:00</span><div class="tl-icon icon-sight"><svg width="22" height="22"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Kiyomizudera&query_place_id=ChIJB_vchdMIAWARujTEUIZlr2I" target="_blank">기요미즈데라</a></div><div class="tl-desc">~15:00</div></div></div>
     <div class="tl-item"><span class="tl-time">15:00</span><div class="tl-icon icon-cafe"><svg width="22" height="22"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Fumon-an%20Fumon%20Chaya&query_place_id=ChIJlf7469EIAWARsQ1RxqVW7q4" target="_blank">Fumon-an &amp; Fumon Chaya</a></div><div class="tl-desc">~16:00 · 와라비모찌, 말차파르페</div></div></div>
@@ -366,6 +433,25 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="tl-item"><span class="tl-time">17:30</span><div class="tl-icon icon-sight"><svg width="22" height="22"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=ShinPuhKan%20Kyoto&query_place_id=ChIJMduzC4UIAWARpiag7PjbAy8" target="_blank">신풍관</a></div><div class="tl-desc">~19:30<br><span class="tl-tag tag-warn" style="font-size:12px">⚠ 20시 마감 주의</span></div></div></div>
     <div class="tl-item"><span class="tl-time">20:00</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Sushiro%20Kyoto%20Gion&query_place_id=ChIJBU2KGwAJAWAR79d9kep9Gy0" target="_blank">Sushiro</a></div><div class="tl-desc">~20:45</div></div></div>
     <div class="tl-item"><span class="tl-time">21:00</span><div class="tl-icon icon-shop"><svg width="22" height="22"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name">돈키호테 + 편의점</div><div class="tl-desc">~22:30</div></div></div>
+  </div>
+    <div class="tl-item">
+      <span class="tl-time">24:00</span>
+      <div class="tl-icon icon-sleep"><svg width="22" height="22"><use href="#ic-sleep"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">취침</div>
+        
+        <div class="hotel-row">
+          <a class="hotel-chip" href="https://www.google.com/maps/search/?api=1&query=Mitsui%20Garden%20Hotel%20Kyoto%20Kawaramachi%20Jokyoji&query_place_id=ChIJDU-sQQAJAWARQQrhFtfNHdk" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 14 14"><path d="M7 1 Q11 1 11 5 Q11 9 7 13 Q3 9 3 5 Q3 1 7 1Z" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="7" cy="5" r="1.5" fill="currentColor"/></svg>
+            🏨 미쓰이 가든 교토 가와라마치
+          </a>
+          <button class="voucher-chip" onclick='showVoucher("kyoto")'>
+            <svg width="13" height="13" viewBox="0 0 14 14"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><line x1="4.5" y1="5" x2="9.5" y2="5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="9.5" y2="7.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="10" x2="7.5" y2="10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+            예약정보
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="note-box">★ 내일 아침: 비타민음료 챙기기</div>
 </div>
@@ -378,7 +464,7 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="day-badge badge-kyoto">교토</div>
     <div class="day-title">4월 14일 화요일</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://www.data.jma.go.jp/multi/yoho/yoho_detail.html?code=260010&lang=kr" target="_blank"><span id="wx-day4">🌧 15–23°C · 비</span> ↗</a>
+      <a class="meta-chip" href="https://www.google.com/search?q=교토+날씨+주간&hl=ko" target="_blank"><span id="wx-day4">🌧 15–23°C · 비</span> ↗</a>
       <div class="meta-chip">👕 면바지, 티셔츠, 아우터셔츠</div>
     </div>
   </div>
@@ -417,6 +503,38 @@ a.meta-chip:hover{background:#e5e7eb}
       <div class="tl-item"><span class="tl-time">—</span><div class="tl-icon icon-sight"><svg width="22" height="22"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Kamogawa%20River%20Kyoto&query_place_id=ChIJKZsHV-QIAWARAwyExuxohlc" target="_blank">가모강</a> 산책</div></div></div>
       <div class="tl-item"><span class="tl-time">22:00</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Pizza-La%20Kyoto%20Chuo&query_place_id=ChIJ7S96bKMIAWARuOYusmNYfnI" target="_blank">Pizza-La Kyoto-Chuo</a> 테이크아웃</div><div class="tl-desc">숙소에서 야식 / 돌아가는 길 편의점 들르기</div></div></div>
     </div>
+    <div class="tl-item">
+      <span class="tl-time">24:00</span>
+      <div class="tl-icon icon-sleep"><svg width="22" height="22"><use href="#ic-sleep"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">취침</div>
+        
+        <div class="hotel-row">
+          <a class="hotel-chip" href="https://www.google.com/maps/search/?api=1&query=Mitsui%20Garden%20Hotel%20Kyoto%20Kawaramachi%20Jokyoji&query_place_id=ChIJDU-sQQAJAWARQQrhFtfNHdk" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 14 14"><path d="M7 1 Q11 1 11 5 Q11 9 7 13 Q3 9 3 5 Q3 1 7 1Z" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="7" cy="5" r="1.5" fill="currentColor"/></svg>
+            🏨 미쓰이 가든 교토 가와라마치
+          </a>
+          <button class="voucher-chip" onclick='showVoucher("kyoto")'>
+            <svg width="13" height="13" viewBox="0 0 14 14"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><line x1="4.5" y1="5" x2="9.5" y2="5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="9.5" y2="7.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="10" x2="7.5" y2="10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+            예약정보
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">24:00</span>
+      <div class="tl-icon icon-sleep"><svg width="22" height="22"><use href="#ic-sleep"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">취침</div>
+        
+        <div class="hotel-row">
+          <a class="hotel-chip" href="https://www.google.com/maps/search/?api=1&query=Mitsui%20Garden%20Hotel%20Kyoto%20Kawaramachi%20Jokyoji&query_place_id=ChIJDU-sQQAJAWARQQrhFtfNHdk" target="_blank"><svg width="13" height="13" viewBox="0 0 14 14"><path d="M7 1 Q11 1 11 5 Q11 9 7 13 Q3 9 3 5 Q3 1 7 1Z" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="7" cy="5" r="1.5" fill="currentColor"/></svg>🏨 미쓰이 가든 교토 가와라마치</a>
+          <button class="voucher-chip" onclick='showVoucher("kyoto")'><svg width="13" height="13" viewBox="0 0 14 14"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><line x1="4.5" y1="5" x2="9.5" y2="5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="9.5" y2="7.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>예약정보</button>
+        </div>
+      </div>
+    </div>
+    </div>
     <div class="note-box">★ 내일 아침: 비타민음료 + 간식거리 준비</div>
   </div>
 
@@ -449,6 +567,19 @@ a.meta-chip:hover{background:#e5e7eb}
       <div class="tl-item"><span class="tl-time">—</span><div class="tl-icon icon-sight"><svg width="22" height="22"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Kamogawa%20River%20Kyoto&query_place_id=ChIJKZsHV-QIAWARAwyExuxohlc" target="_blank">가모강</a> 산책</div></div></div>
       <div class="tl-item"><span class="tl-time">22:00</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Pizza-La%20Kyoto%20Chuo&query_place_id=ChIJ7S96bKMIAWARuOYusmNYfnI" target="_blank">Pizza-La Kyoto-Chuo</a> 테이크아웃</div><div class="tl-desc">숙소에서 야식 / 돌아가는 길 편의점</div></div></div>
     </div>
+    <div class="tl-item">
+      <span class="tl-time">24:00</span>
+      <div class="tl-icon icon-sleep"><svg width="22" height="22"><use href="#ic-sleep"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">취침</div>
+        
+        <div class="hotel-row">
+          <a class="hotel-chip" href="https://www.google.com/maps/search/?api=1&query=Mitsui%20Garden%20Hotel%20Kyoto%20Kawaramachi%20Jokyoji&query_place_id=ChIJDU-sQQAJAWARQQrhFtfNHdk" target="_blank"><svg width="13" height="13" viewBox="0 0 14 14"><path d="M7 1 Q11 1 11 5 Q11 9 7 13 Q3 9 3 5 Q3 1 7 1Z" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="7" cy="5" r="1.5" fill="currentColor"/></svg>🏨 미쓰이 가든 교토 가와라마치</a>
+          <button class="voucher-chip" onclick='showVoucher("kyoto")'><svg width="13" height="13" viewBox="0 0 14 14"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><line x1="4.5" y1="5" x2="9.5" y2="5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="9.5" y2="7.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>예약정보</button>
+        </div>
+      </div>
+    </div>
+    </div>
     <div class="note-box">★ 내일 아침: 비타민음료 + 간식거리 준비</div>
   </div>
 </div>
@@ -461,7 +592,7 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="day-badge badge-home">귀국일</div>
     <div class="day-title">4월 15일 수요일 — 귀국</div>
     <div class="day-meta">
-      <a class="meta-chip" href="https://www.data.jma.go.jp/multi/yoho/yoho_detail.html?code=270000&lang=kr" target="_blank"><span id="wx-day5">🌤 14–21°C · 맑음</span> ↗</a>
+      <a class="meta-chip" href="https://www.google.com/search?q=오사카+날씨+주간&hl=ko" target="_blank"><span id="wx-day5">🌤 14–21°C · 맑음</span> ↗</a>
     </div>
   </div>
   <div class="route-bar">
@@ -536,7 +667,7 @@ var DAYS_MAP = {
   3:{color:'#b45309',stops:[
     {ll:[34.7047,135.4961],name:'우메다 출발',time:'08:30',desc:'한큐 특급'},
     {ll:[35.0085,135.7620],name:'가와라마치 호텔',time:'10:00',desc:'짐 맡기기'},
-    {ll:[35.0013,135.7669],name:'멘야 이노이치',time:'10:15',desc:''},
+    {ll:[35.0013,135.7669],name:'멘야 이노이치',time:'11:00',desc:''},
     {ll:[34.9947,135.7847],name:'기요미즈데라',time:'13:00',desc:'🚶 도보 1.8km'},
     {ll:[35.0096,135.7598],name:'신풍관',time:'17:30',desc:'⚠ 20시 마감'}
   ]},
@@ -720,6 +851,96 @@ clLoad();
   CL_DATA.forEach(function(cat,ci){cat.items.forEach(function(_,ii){total++;if(clState[clKey(ci,ii)])checked++;});});
   document.getElementById('clBadge').textContent=(total?Math.round(checked/total*100):0)+'%';
 })();
+</script>
+
+<!-- ── 야키니쿠 예약 팝업 ── -->
+<div class="popup-overlay" id="popRestaurant" onclick="closePopup('popRestaurant')">
+  <div class="popup-sheet" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <div class="popup-title">🥩 식당 예약 정보</div>
+      <button class="popup-close" onclick="closePopup('popRestaurant')">×</button>
+    </div>
+    <div class="popup-body">
+      <div class="rsv-header">
+        <div class="rsv-rest">焼肉 武士道 梅田のすみっこ店<br><span style="font-size:13px;opacity:.85">(야키니쿠 부시도 우메다 스미코 매장)</span></div>
+        <div class="rsv-sub">食べログ (타베로그) 예약</div>
+        <div class="rsv-num">RNGT54F2XY</div>
+      </div>
+      <div class="rsv-row"><div class="rsv-lbl">예약 현황</div><div class="rsv-val"><span class="rsv-badge">가게 오기 전에 (来店前)</span></div></div>
+      <div class="rsv-row"><div class="rsv-lbl">예약자</div><div class="rsv-val">이정환 (Lee, Jeonghwan)</div></div>
+      <div class="rsv-row"><div class="rsv-lbl">방문 날짜</div><div class="rsv-val">2026년 4월 11일 <strong>토요일</strong></div></div>
+      <div class="rsv-row"><div class="rsv-lbl">방문 시간</div><div class="rsv-val"><strong style="font-size:16px">20:45</strong></div></div>
+      <div class="rsv-row"><div class="rsv-lbl">인원</div><div class="rsv-val">2명</div></div>
+      <div class="rsv-row"><div class="rsv-lbl">체류 시간</div><div class="rsv-val">2시간 (滞在可能時間 : 2時間)</div></div>
+      <div class="rsv-row"><div class="rsv-lbl">코스</div><div class="rsv-val">지정 없음 (コース : 指定しない)<br><span style="font-size:13px;color:#888">결제는 당일 (お会計は当日)</span></div></div>
+      <div class="rsv-row"><div class="rsv-lbl">좌석</div><div class="rsv-val">카운터 / 금연 (カウンター / 禁煙)<br><span style="font-size:13px;color:#888">개인실 없음 (個室等 : なし)</span></div></div>
+      <div class="rsv-row"><div class="rsv-lbl">취소 정책</div><div class="rsv-val"><span class="rsv-warn">⚠ 당일 14:00까지 연락</span><br><span style="font-size:13px;color:#888">취소 수수료 없음 (キャンセル料は発生しません)</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 호텔 바우처 팝업 ── -->
+<div class="popup-overlay" id="popVoucher" onclick="closePopup('popVoucher')">
+  <div class="popup-sheet" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <div class="popup-title" id="voucherTitle">🏨 호텔 예약 정보</div>
+      <button class="popup-close" onclick="closePopup('popVoucher')">×</button>
+    </div>
+    <div class="popup-body" id="voucherBody"></div>
+  </div>
+</div>
+
+<script>
+var VOUCHERS = {
+  osaka: `
+    <div class="htl-header htl-osaka">
+      <div class="htl-name">Hotel Hankyu RESPIRE OSAKA</div>
+      <div class="htl-sub">호텔 한큐 레스파이어 오사카</div>
+      <div class="htl-bnum">Agoda 예약번호 : 1707465199</div>
+    </div>
+    <div class="rsv-row"><div class="rsv-lbl">위치</div><div class="rsv-val">1-1 Ofukacho, Kita Ward, Osaka<br><span style="font-size:13px;color:#888">오사카 기타구 — 오사카역 바로 위</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">체크인</div><div class="rsv-val"><strong>2026년 4월 11일 (토)</strong><br><span style="font-size:13px;color:#888">체크인 가능 시간 없음 (언제든지)</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">체크아웃</div><div class="rsv-val"><strong>2026년 4월 13일 (월)</strong><br><span style="font-size:13px;color:#888">체크아웃 11:00까지</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">숙박</div><div class="rsv-val">2박</div></div>
+    <div class="rsv-row"><div class="rsv-lbl">객실</div><div class="rsv-val">30층 스탠다드 트윈룸 (금연)<br><span style="font-size:13px;color:#888">30th-High Floor Standard Twin Room - NonSmoking</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">인원</div><div class="rsv-val">성인 2명</div></div>
+    <div class="rsv-row"><div class="rsv-lbl">금액</div><div class="rsv-val"><strong>KRW 618,548</strong> (USD 418.94)<br><span style="font-size:13px;color:#888">Agoda 결제 완료 · 할인 USD -26.42 적용</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">포함</div><div class="rsv-val">Room Only (조식 미포함)</div></div>
+    <div class="rsv-row"><div class="rsv-lbl">유의사항</div><div class="rsv-val"><span class="rsv-warn">💡 체크인 15:00 이후 가능</span><br><span style="font-size:13px;color:#888">늦은 체크인 시 사전 연락 권장</span></div></div>
+  `,
+  kyoto: `
+    <div class="htl-header htl-kyoto">
+      <div class="htl-name">Mitsui Garden Hotel<br>Kyoto Kawaramachi Jokyoji</div>
+      <div class="htl-sub">미쓰이 가든 호텔 교토 가와라마치 죠쿄지</div>
+      <div class="htl-bnum">인터파크 예약번호 : 251211063709</div>
+    </div>
+    <div class="rsv-row"><div class="rsv-lbl">위치</div><div class="rsv-val">620 Teianmaenocho, Kyoto<br><span style="font-size:13px;color:#888">교토시 가와라마치 지역</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">확정번호</div><div class="rsv-val">284-6148485</div></div>
+    <div class="rsv-row"><div class="rsv-lbl">체크인</div><div class="rsv-val"><strong>2026년 4월 13일 (월)</strong><br><span style="font-size:13px;color:#888">체크인 15:00 이후 · 짐 먼저 맡기기 가능</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">체크아웃</div><div class="rsv-val"><strong>2026년 4월 15일 (수)</strong><br><span style="font-size:13px;color:#888">체크아웃 11:00까지</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">숙박</div><div class="rsv-val">2박</div></div>
+    <div class="rsv-row"><div class="rsv-lbl">객실</div><div class="rsv-val">스탠다드, 2 beds (Standard 2 beds)<br><span style="font-size:13px;color:#888">ROOM ONLY</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">투숙객</div><div class="rsv-val">성인 2명 (LEE, JEONGHWAN)</div></div>
+    <div class="rsv-row"><div class="rsv-lbl">포함</div><div class="rsv-val">Room Only (조식 미포함)</div></div>
+    <div class="rsv-row"><div class="rsv-lbl">유의사항</div><div class="rsv-val"><span class="rsv-warn">⚠ 교토시 숙박세 별도 (200엔/인)</span><br><span style="font-size:13px;color:#888">20,000엔 이하 숙박 기준</span></div></div>
+    <div class="rsv-row"><div class="rsv-lbl">긴급연락</div><div class="rsv-val"><span style="font-size:13px">+82-2-6410-8585</span></div></div>
+  `
+};
+
+function showRestaurantBooking() {
+  document.getElementById('popRestaurant').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function showVoucher(type) {
+  document.getElementById('voucherTitle').textContent = type === 'osaka' ? '🏨 한큐 레스파이어 오사카' : '🏨 미쓰이 가든 교토 가와라마치';
+  document.getElementById('voucherBody').innerHTML = VOUCHERS[type];
+  document.getElementById('popVoucher').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePopup(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
 </script>
 </body>
 </html>
