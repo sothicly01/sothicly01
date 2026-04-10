@@ -192,6 +192,25 @@ a.meta-chip:hover{background:#e5e7eb}
 
 .rsv-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:5px 11px;border-radius:20px;background:#e8f5e9;color:#2e7d32;text-decoration:none;border:1px solid #c8e6c9;margin-top:5px}
 .rsv-btn:hover{background:#c8e6c9}
+
+.locker-card{border:1.5px solid #e5e7eb;border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer;transition:border-color .15s,background .15s}
+.locker-card:hover,.locker-card:active{border-color:#3b82f6;background:#f8faff}
+.locker-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.locker-rank{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.rank-1{background:#fef3c7;color:#92400e}
+.rank-2{background:#e0f2fe;color:#0369a1}
+.rank-3{background:#f3e8ff;color:#7c3aed}
+.locker-name{font-size:14px;font-weight:700;flex:1}
+.locker-map{font-size:12px;color:#6b7280;flex-shrink:0}
+.locker-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.l-tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px}
+.l-tag-green{background:#dcfce7;color:#166534}
+.l-tag-blue{background:#dbeafe;color:#1d4ed8}
+.l-tag-purple{background:#f3e8ff;color:#7c3aed}
+.locker-desc{display:flex;flex-direction:column;gap:3px}
+.locker-row{font-size:13px;color:#374151}
+.locker-row.warn{color:#b45309}
+.locker-row.tip{color:#7c3aed}
 </style>
 </head>
 <body>
@@ -532,7 +551,7 @@ a.meta-chip:hover{background:#e5e7eb}
       <div class="tl-item"><span class="tl-time">09:30</span><div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">택시로 <a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Ginkakuji&query_place_id=ChIJ4W9CCwUJAWARyauI6BzKiiU" target="_blank">은각사</a> 이동</div><a class="tl-gmap tl-gmap-drive" href="https://www.google.com/maps/dir/?api=1&origin=35.0094,135.7671&destination=35.0270,135.7982&travelmode=driving" target="_blank">🚕 택시 경로로 열기</a></div></div>
       <div class="tl-item"><span class="tl-time">10:00</span><div class="tl-icon icon-sight"><svg width="22" height="22"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Ginkakuji&query_place_id=ChIJ4W9CCwUJAWARyauI6BzKiiU" target="_blank">은각사(지쇼지)</a> 관람</div><div class="tl-desc">~12:00</div></div></div>
       <div class="tl-item"><span class="tl-time">12:00</span><div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">철학의 길 → 택시로 <a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Yamamoto%20Menzou&query_place_id=ChIJAQDFqeYIAWARErPxiBriOF8" target="_blank">야마모토 멘조우</a></div><a class="tl-gmap tl-gmap-drive" href="https://www.google.com/maps/dir/?api=1&origin=35.0215,135.7943&destination=35.0142,135.7848&travelmode=driving" target="_blank">🚕 택시 경로로 열기</a></div></div>
-      <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Yamamoto%20Menzou&query_place_id=ChIJAQDFqeYIAWARErPxiBriOF8" target="_blank">야마모토 멘조우</a></div><div class="tl-desc">~14:00</div></div></div>
+        <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Yamamoto%20Menzou&query_place_id=ChIJAQDFqeYIAWARErPxiBriOF8" target="_blank">야마모토 멘조우</a></div><div class="tl-desc">~14:00</div></div></div>
       <div class="tl-item"><span class="tl-time">14:30</span><div class="tl-icon icon-sight"><svg width="22" height="22"><use href="#ic-sight"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Inaricho+Kitagumi+Higashiyama+Ward+Kyoto+605-0062" target="_blank">행자교</a></div><div class="tl-desc">도보 1.2km · 줄 길면 → 모모타로 진</div><a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=35.0142,135.7848&destination=34.9947,135.7847&travelmode=walking" target="_blank">🚶 도보로 열기</a></div></div>
       <div class="tl-item"><span class="tl-time">15:00</span><div class="tl-icon icon-cafe"><svg width="22" height="22"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Umezono%20Kyoto&query_place_id=ChIJMZDLZJMIAWARD1HpjRtDHpg" target="_blank">우메조노</a> — 미타라시 당고</div><div class="tl-desc">~15:30</div></div></div>
       <div class="tl-item"><span class="tl-time">15:30</span><div class="tl-icon icon-shop"><svg width="22" height="22"><use href="#ic-shop"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=UNIQLO+%E3%83%9F%E3%83%BC%E3%83%8A%E4%BA%AC%E9%83%BD&location=35.0031,135.7693" target="_blank">유니클로 미나 교토</a>, 나이키 쇼핑</div><div class="tl-desc">~17:30</div></div></div>
@@ -581,6 +600,15 @@ a.meta-chip:hover{background:#e5e7eb}
     <div class="tl-item"><span class="tl-time">07:00</span><div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">기상 → 08:20까지 짐 정리</div><div class="tl-desc">짐 맡기는 곳 미리 확인해놓기</div></div></div>
     <div class="tl-item"><span class="tl-time">08:45</span><div class="tl-icon icon-cafe"><svg width="22" height="22"><use href="#ic-cafe"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Inoda%20Coffee%20Kyoto&query_place_id=ChIJHYWgPJAIAWAR1EwyilguU10" target="_blank">이노다커피</a></div><div class="tl-desc">~10:20</div></div></div>
     <div class="tl-item"><span class="tl-time">10:45</span><div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">체크아웃 → 난바로 이동</div><div class="tl-desc">가와라마치→난바 경로 미리 확인</div><a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=35.0050,135.7686&destination=34.6661,135.5015&travelmode=transit" target="_blank">🚇 대중교통으로 열기</a></div></div>
+    <div class="tl-item">
+      <span class="tl-time">12:00</span>
+      <div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div>
+      <div class="tl-body">
+        <div class="tl-name">난바역 도착 · 캐리어 맡기기</div>
+        <div class="tl-desc">교토 가와라마치 → 난바 약 55분 (한큐특급+지하철)</div>
+        <a class="tl-gmap tl-gmap-transit" href="javascript:void(0)" onclick="showLockerInfo()" style="background:#fef3c7;color:#92400e;border:1px solid #fde68a">🧳 락커 보관 정보 보기</a>
+      </div>
+    </div>
     <div class="tl-item"><span class="tl-time">12:30</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Mugen%20Ramen%20Namba&query_place_id=ChIJsYm_2qTnAGARUw2JSPkAH_Y" target="_blank">무겐라멘</a></div><div class="tl-desc">~14:30</div></div></div>
     <div class="tl-item"><span class="tl-time">14:30</span><div class="tl-icon icon-eat"><svg width="22" height="22"><use href="#ic-eat"/></svg></div><div class="tl-body"><div class="tl-name"><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Nankai+Namba+Station+%EA%B7%BC%EC%B2%98+%ED%8E%B8%EC%9D%98%EC%A0%90&location=34.6661,135.5015&radius=300" target="_blank">편의점 요깃거리</a></div><div class="tl-desc">~15:30 · <a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Onigiri%20Gorichan&query_place_id=ChIJNSYMr4bnAGARsYIlYMtx3_Y" target="_blank">오니기리 고리짱</a>도 근처에 있어요</div></div></div>
     <div class="tl-item"><span class="tl-time">15:30</span><div class="tl-icon icon-move"><svg width="22" height="22"><use href="#ic-move"/></svg></div><div class="tl-body"><div class="tl-name">난카이 난바역으로 이동</div><div class="tl-desc">~15:45</div><a class="tl-gmap tl-gmap-walk" href="https://www.google.com/maps/dir/?api=1&origin=34.6687,135.5013&destination=34.6661,135.5015&travelmode=walking" target="_blank">🚶 도보로 열기</a></div></div>
@@ -913,6 +941,97 @@ function closePopup(id) {
   document.getElementById(id).classList.remove('open');
   document.body.style.overflow = '';
 }
+</script>
+
+<!-- ── 락커 보관 정보 팝업 ── -->
+<div class="popup-overlay" id="popLocker" onclick="closePopup('popLocker')">
+  <div class="popup-sheet" onclick="event.stopPropagation()" style="max-width:440px">
+    <div style="padding:10px 0 0;background:white;border-radius:22px 22px 0 0"><div class="cl-drag"></div></div>
+    <div class="popup-header" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:18px 18px 0 0;padding:18px 20px">
+      <div style="flex:1">
+        <div style="color:white;font-size:17px;font-weight:700">🧳 캐리어 보관 전략</div>
+        <div style="color:rgba(255,255,255,.65);font-size:12px;margin-top:3px">난바역 도착 직후 바로 맡기는 게 핵심</div>
+      </div>
+      <button class="popup-close" onclick="closePopup('popLocker')" style="color:rgba(255,255,255,.7)">×</button>
+    </div>
+
+    <!-- 실전 전략 배너 -->
+    <div style="background:#fffbeb;border-bottom:1px solid #fde68a;padding:12px 18px;font-size:13px;color:#78350f;line-height:1.6">
+      <strong>📌 일정 참조</strong><br>
+      12:00 난바 도착 → 16:00 라피트 탑승<br>
+      <strong>① 난카이 난바역 락커 먼저 → ② 없으면 난바 CITY → ③ 그래도 없으면 ecbo cloak</strong>
+    </div>
+
+    <div class="popup-body" style="padding:14px 16px 24px">
+
+      <!-- 옵션 1 -->
+      <div class="locker-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=%E9%9B%A3%E6%B3%A2+%E3%82%B3%E3%82%A4%E3%83%B3%E3%83%AD%E3%83%83%E3%82%AB%E3%83%BC+%E9%9B%A3%E6%B3%A2%E9%A7%85&location=34.6661,135.5015','_blank')">
+        <div class="locker-head">
+          <span class="locker-rank rank-1">1순위</span>
+          <span class="locker-name">🚆 난카이 난바역 코인락커</span>
+          <span class="locker-map">지도 ↗</span>
+        </div>
+        <div class="locker-tags">
+          <span class="l-tag l-tag-green">라피트 탑승구 바로 옆</span>
+          <span class="l-tag l-tag-blue">600~1,000엔</span>
+          <span class="l-tag l-tag-blue">대형 가능</span>
+        </div>
+        <div class="locker-desc">
+          <div class="locker-row">✅ 이동 동선 최적 · 가장 편함</div>
+          <div class="locker-row warn">⚠ 오후 되면 자리 금방 꽉 참 — 도착하자마자 바로 GO</div>
+          <div class="locker-row">💴 현금(100엔 동전) or IC카드</div>
+        </div>
+      </div>
+
+      <!-- 옵션 2 -->
+      <div class="locker-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Namba+City+Osaka&query_place_id=ChIJFd5ZaGnnAGARMfWwM6X4XWQ','_blank')">
+        <div class="locker-head">
+          <span class="locker-rank rank-2">2순위</span>
+          <span class="locker-name">🏬 난바 CITY 쇼핑몰</span>
+          <span class="locker-map">지도 ↗</span>
+        </div>
+        <div class="locker-tags">
+          <span class="l-tag l-tag-blue">역 바로 옆 쇼핑몰</span>
+          <span class="l-tag l-tag-green">자리 여유 상대적으로 있음</span>
+        </div>
+        <div class="locker-desc">
+          <div class="locker-row">✅ 대형 락커도 꽤 있음</div>
+          <div class="locker-row">✅ 난카이역 락커 꽉 찼을 때 바로 옆</div>
+          <div class="locker-row" style="color:#6b7280;font-size:12px">📍 〒542-0076 Osaka, Chuo Ward, Namba 5-1-60 (난카이 난바역 바로 연결)</div>
+        </div>
+      </div>
+
+      <!-- 옵션 3 -->
+      <div class="locker-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=ecbo+cloak+Namba+Osaka&location=34.6661,135.5015','_blank')">
+        <div class="locker-head">
+          <span class="locker-rank rank-3">3순위</span>
+          <span class="locker-name">📦 ecbo cloak (예약제)</span>
+          <span class="locker-map">지도 ↗</span>
+        </div>
+        <div class="locker-tags">
+          <span class="l-tag l-tag-purple">100% 보관 가능</span>
+          <span class="l-tag l-tag-blue">약 1,000엔</span>
+        </div>
+        <div class="locker-desc">
+          <div class="locker-row">✅ 예약제 → 자리 보장</div>
+          <div class="locker-row">✅ 카페·상점에 맡기는 방식</div>
+          <div class="locker-row warn">⚠ 코인락커보다 위치 조금 이동 필요</div>
+          <div class="locker-row tip">💡 위 두 곳 꽉 찼을 때 확실한 백업</div>
+        </div>
+      </div>
+
+      <!-- 팁 -->
+      <div style="background:#f0f9ff;border-radius:10px;padding:12px 14px;font-size:13px;color:#0369a1;margin-top:4px">
+        <strong>💡 캐리어 크기 참고</strong><br>
+        24인치 → 거의 가능 &nbsp;|&nbsp; 28~30인치 → 자리 제한 있음<br>
+        <span style="color:#64748b;font-size:12px">선착순 → 도착하자마자 바로 확인하는 게 핵심!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showLockerInfo(){document.getElementById("popLocker").classList.add("open");document.body.style.overflow="hidden";}
 </script>
 </body>
 </html>
