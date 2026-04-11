@@ -211,6 +211,30 @@ a.meta-chip:hover{background:#e5e7eb}
 .locker-row{font-size:13px;color:#374151}
 .locker-row.warn{color:#b45309}
 .locker-row.tip{color:#7c3aed}
+
+/* ── 버스 팝업 ── */
+.bus-opt{border:1.5px solid #e5e7eb;border-radius:14px;overflow:hidden;margin-bottom:12px}
+.bus-opt-head{padding:13px 16px;display:flex;align-items:center;gap:10px;cursor:default}
+.bus-rank{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;flex-shrink:0}
+.rank-bus1{background:#fef3c7;color:#92400e}
+.rank-bus2{background:#e0f2fe;color:#0369a1}
+.rank-bus3{background:#f3e8ff;color:#7c3aed}
+.bus-opt-title{font-size:15px;font-weight:700;flex:1}
+.bus-opt-body{border-top:1px solid #f3f4f6;padding:12px 16px;display:flex;flex-direction:column;gap:7px}
+.bus-summary{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.bus-pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;background:#f3f4f6;color:#374151}
+.bus-pill.yellow{background:#fef3c7;color:#78350f}
+.bus-pill.blue{background:#dbeafe;color:#1d4ed8}
+.bus-pill.green{background:#dcfce7;color:#166534}
+.bus-pill.red{background:#fee2e2;color:#b91c1c}
+.bus-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px dashed #f0f0f0}
+.bus-step:last-child{border-bottom:none}
+.bus-step-num{width:22px;height:22px;border-radius:50%;background:#1d4ed8;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.bus-step-text{font-size:13.5px;color:#1a1a1a;line-height:1.5;flex:1}
+.bus-step-sub{font-size:12px;color:#6b7280;margin-top:2px}
+.bus-warn{background:#fff7ed;border-radius:8px;padding:9px 12px;font-size:13px;color:#92400e;line-height:1.5}
+.bus-tip{background:#f0fdf4;border-radius:8px;padding:9px 12px;font-size:13px;color:#166534;line-height:1.5}
+.bus-map-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;background:#dbeafe;color:#1d4ed8;text-decoration:none;margin-top:4px}
 </style>
 </head>
 <body>
@@ -327,6 +351,7 @@ a.meta-chip:hover{background:#e5e7eb}
         <div class="tl-name">리무진 버스 탑승</div>
         <div class="tl-desc">19:30–20:30 호텔 도착 / 시간 남으면 <a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Hanadako%20Umeda&query_place_id=ChIJ_5Ip7-zmAGAReRZN8gzci50" target="_blank">하나다코</a> 네기타코야키 8알</div>
         <a class="tl-gmap tl-gmap-transit" href="https://www.google.com/maps/dir/?api=1&origin=%EA%B0%84%EC%82%AC%EC%9D%B4+%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD&origin_place_id=ChIJ9_rNIxO5AGARiI-QjZ-ncfE&destination=%ED%98%B8%ED%85%94+%ED%95%9C%ED%81%90+%EB%A0%88%EC%8A%A4%ED%8C%8C%EC%9D%B4%EC%96%B4+%EC%98%A4%EC%82%AC%EC%B9%B4&destination_place_id=ChIJK58ZLmHnAGARzi96ugXQHz8&travelmode=transit" target="_blank">🚌 대중교통으로 열기</a>
+        <a class="tl-gmap" href="javascript:void(0)" onclick="showBusInfo()" style="background:#fdf4ff;color:#7c3aed;border:1px solid #e9d5ff">🗺 탑승 방법 보기</a>
       </div>
     </div>
     <div class="tl-item">
@@ -1032,6 +1057,137 @@ function closePopup(id) {
 
 <script>
 function showLockerInfo(){document.getElementById("popLocker").classList.add("open");document.body.style.overflow="hidden";}
+</script>
+
+<!-- ── 리무진 버스 탑승 방법 팝업 ── -->
+<div class="popup-overlay" id="popBus" onclick="closePopup('popBus')">
+  <div class="popup-sheet" onclick="event.stopPropagation()" style="max-width:460px">
+    <div style="padding:10px 0 0;background:white;border-radius:22px 22px 0 0"><div class="cl-drag"></div></div>
+    <div class="popup-header" style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:18px 18px 0 0;padding:18px 20px">
+      <div style="flex:1">
+        <div style="color:white;font-size:17px;font-weight:700">🚌 공항 → 호텔 이동 가이드</div>
+        <div style="color:rgba(255,255,255,.65);font-size:12px;margin-top:3px">간사이공항 → 한큐 레스파이어 오사카</div>
+      </div>
+      <button class="popup-close" onclick="closePopup('popBus')" style="color:rgba(255,255,255,.7)">×</button>
+    </div>
+
+    <div class="popup-body" style="padding:14px 16px 28px">
+
+      <!-- 1순위: 리무진 버스 -->
+      <div class="bus-opt">
+        <div class="bus-opt-head" style="background:#fffbeb">
+          <span class="bus-rank rank-bus1">🥇 1순위 추천</span>
+          <span class="bus-opt-title">공항 리무진 버스</span>
+        </div>
+        <div class="bus-opt-body">
+          <div class="bus-summary">
+            <span class="bus-pill yellow">💰 1,800엔</span>
+            <span class="bus-pill blue">⏱ 약 60분</span>
+            <span class="bus-pill green">환승 없음</span>
+            <span class="bus-pill green">캐리어 짐칸 보관</span>
+          </div>
+
+          <div style="font-size:13px;font-weight:700;color:#374151;margin:4px 0 2px">✈ 입국 후 이렇게 하면 됩니다</div>
+
+          <div class="bus-step">
+            <div class="bus-step-num">1</div>
+            <div class="bus-step-text">
+              <strong>제1터미널 1층 도착 로비 나오기</strong>
+              <div class="bus-step-sub">입국심사·수하물 수취 후 바로 1층 출구</div>
+            </div>
+          </div>
+          <div class="bus-step">
+            <div class="bus-step-num">2</div>
+            <div class="bus-step-text">
+              <strong>리무진 버스 매표소에서 티켓 구매</strong>
+              <div class="bus-step-sub">현금 or 카드 가능 · "오사카역(우메다)" 방향 구매<br>자동발권기도 이용 가능</div>
+            </div>
+          </div>
+          <div class="bus-step">
+            <div class="bus-step-num">3</div>
+            <div class="bus-step-text">
+              <strong>1층 5번 승강장으로 이동해서 줄 서기</strong>
+              <div class="bus-step-sub">우메다/오사카역 방향 · 선착순 탑승<br>배차 간격 약 15~20분 · 만석이면 다음 버스</div>
+            </div>
+          </div>
+          <div class="bus-step">
+            <div class="bus-step-num">4</div>
+            <div class="bus-step-text">
+              <strong>캐리어는 버스 짐칸에 맡기고 탑승</strong>
+              <div class="bus-step-sub">수하물 태그 반권 받아서 꼭 보관</div>
+            </div>
+          </div>
+          <div class="bus-step">
+            <div class="bus-step-num">5</div>
+            <div class="bus-step-text">
+              <strong>오사카역·한큐삼번가 정류장에서 하차</strong>
+              <div class="bus-step-sub">🚶 도보 3~5분 → 호텔 한큐 레스파이어 도착</div>
+              <a class="bus-map-btn" href="https://www.google.com/maps/dir/?api=1&origin=Hotel+Hankyu+RESPIRE+OSAKA&destination=Hotel+Hankyu+RESPIRE+OSAKA&query_place_id=ChIJK58ZLmHnAGARzi96ugXQHz8" target="_blank">🗺 정류장→호텔 도보경로</a>
+            </div>
+          </div>
+
+          <div class="bus-warn">
+            ⚠ <strong>17~20시 피크타임</strong>은 대기 가능 — 입국 후 바로 이동하면 대기 거의 없음<br>
+            ⚠ 만석 시 1대(15~20분) 기다리면 탑승 가능
+          </div>
+          <div class="bus-tip">
+            ✅ 캐리어 2개까지 무료 수하물 처리<br>
+            ✅ 좌석 지정 없음 (선착순, 전 좌석 앉아서 이동)
+          </div>
+          <a class="bus-map-btn" href="https://www.kate.co.jp/kr/timetable/detail/UM" target="_blank" style="background:#fef3c7;color:#78350f">📋 KATE 공식 시간표 확인</a>
+        </div>
+      </div>
+
+      <!-- 2순위: JR 하루카 -->
+      <div class="bus-opt">
+        <div class="bus-opt-head" style="background:#eff6ff">
+          <span class="bus-rank rank-bus2">🥈 2순위</span>
+          <span class="bus-opt-title">JR 하루카 특급</span>
+        </div>
+        <div class="bus-opt-body">
+          <div class="bus-summary">
+            <span class="bus-pill blue">💰 약 2,400~3,000엔</span>
+            <span class="bus-pill blue">⏱ 약 60~75분</span>
+            <span class="bus-pill yellow">지정석 있음</span>
+          </div>
+          <div style="font-size:13px;color:#374151;line-height:1.6">
+            공항역 → JR 하루카 → 오사카역<br>
+            이후 도보 5~10분으로 호텔 도착<br>
+            <span style="color:#6b7280;font-size:12px">✔ 시간 정확 · 교통 영향 적음<br>✖ 캐리어 들고 환승·도보 이동 불편</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3순위: 난카이+지하철 -->
+      <div class="bus-opt">
+        <div class="bus-opt-head" style="background:#faf5ff">
+          <span class="bus-rank rank-bus3">🥉 3순위</span>
+          <span class="bus-opt-title">난카이 + 미도스지선 지하철</span>
+        </div>
+        <div class="bus-opt-body">
+          <div class="bus-summary">
+            <span class="bus-pill">💰 약 1,200~1,500엔</span>
+            <span class="bus-pill">⏱ 약 60~80분</span>
+            <span class="bus-pill red">환승 2회</span>
+          </div>
+          <div style="font-size:13px;color:#374151;line-height:1.6">
+            공항 → 난카이 라피트/급행 → 난바역<br>
+            난바 → 미도스지선 → 우메다<br>
+            <span style="color:#6b7280;font-size:12px">✔ 가장 저렴<br>✖ 환승 많고 캐리어 이동 불편 · 첫날 추천하지 않음</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bus-tip" style="background:#fff0f0;color:#be123c">
+        🎯 <strong>결론: 리무진 버스가 정답</strong><br>
+        캐리어 있음 + 첫날 낯선 곳 이동 → 환승 없는 리무진이 가장 편해요
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showBusInfo(){document.getElementById("popBus").classList.add("open");document.body.style.overflow="hidden";}
 </script>
 </body>
 </html>
